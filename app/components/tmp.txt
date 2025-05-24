@@ -1,0 +1,123 @@
+"use client"
+import { useEffect, useState } from 'react';
+
+// Define the type for rows of data from the Google Sheets
+type Row = {
+  c: Array<{ v: string | number | null } | undefined>;
+};
+
+const GoogleSheetData = () => {
+  const [data, setData] = useState<Row[]>([]);
+  const [filteredData, setFilteredData] = useState<Row[]>([]); // State for filtered data
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [keywords, setKeywords] = useState<string>(''); // Multiple keywords to filter the rows
+
+  useEffect(() => {
+    const sheetId = '1R9hJjxUYZCNgntXunSAhzxKLlBgUCL6RBZLc1gPt5Ks';
+    const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+
+    const fetchSheetData = async () => {
+      try {
+        const response = await fetch(sheetUrl);
+        const text = await response.text();
+        const jsonData = JSON.parse(text.substring(47).slice(0, -2));
+        const rows = jsonData.table.rows;
+
+        setData(rows); // Store all rows
+        setFilteredData(rows); // Initially, display all rows
+      } catch (err) {
+        setError('Failed to fetch data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSheetData();
+  }, []); // Fetch data on component mount
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent form submission to avoid page reload
+
+    // Split the keywords by space or comma and trim extra spaces
+    const keywordArray = keywords
+      .split(/[ ,]+/) // Split by space or comma
+      .map((keyword) => keyword.trim().toLowerCase())
+      .filter((keyword) => keyword.length > 0); // Remove empty keywords
+
+    // If there are less than two keywords, don't filter
+    if (keywordArray.length >= 2) {
+      const filtered = data.filter((row: Row) => {
+        // Check if both keywords are present in any column
+        return keywordArray.every((keyword) =>
+          row.c.some((cell) => {
+            if (cell?.v) {
+              // Handle string or number separately
+              const cellValue = typeof cell.v === 'string' ? cell.v.toLowerCase() : String(cell.v).toLowerCase();
+              return cellValue.includes(keyword); // Case-insensitive check
+            }
+            return false; // If the value is null or not a string, return false
+          })
+        );
+      });
+      setFilteredData(filtered); // Set filtered rows
+    } else {
+      setFilteredData([]); // If fewer than two keywords, show no rows
+    }
+  };
+
+  const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeywords(e.target.value); // Update the keywords as the user types
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+
+  return (
+    <div>
+      <h1>Google Sheet Data</h1>
+      {/* Wrap input in a form and trigger filtering on form submission */}
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={keywords}
+          onChange={handleKeywordChange} // Track the input change
+          placeholder="Enter two keywords separated by space or comma"
+        />
+        <button type="submit">Search</button> {/* Submit button to trigger filtering */}
+      </form>
+
+      {/* Display filtered rows */}
+      <h2>Filtered Rows</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Column 1</th>
+            <th>Column 2</th>
+            <th>Column 3</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredData.length > 0 ? (
+            filteredData.map((row: Row, index: number) => {  // Annotate the row parameter with the Row type
+              const [col1, col2, col3] = row.c;
+              return (
+                <tr key={index}>
+                  <td>{col1?.v ?? 'N/A'}</td>
+                  <td>{col2?.v ?? 'N/A'}</td>
+                  <td>{col3?.v ?? 'N/A'}</td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan={3}>No matching rows found.</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default GoogleSheetData;
