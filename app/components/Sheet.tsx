@@ -17,7 +17,7 @@ const GoogleSheetData = ({ keywords }: GoogleSheetDataProps) => {
   const [showLoader, setShowLoader] = useState<boolean>(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowLoader(true), 300); // delay loader appearance
+    const timer = setTimeout(() => setShowLoader(true), 300);
     return () => clearTimeout(timer);
   }, []);
 
@@ -31,7 +31,6 @@ const GoogleSheetData = ({ keywords }: GoogleSheetDataProps) => {
         const text = await response.text();
         const jsonData = JSON.parse(text.substring(47).slice(0, -2));
         const rows = jsonData.table.rows;
-
         setData(rows);
       } catch (error) {
         console.error('Failed to fetch data', error);
@@ -58,41 +57,48 @@ const GoogleSheetData = ({ keywords }: GoogleSheetDataProps) => {
       );
       setFilteredData(filtered);
     } else {
-      setFilteredData([]); // Require exactly 3 keywords
+      setFilteredData([]);
     }
   }, [keywords, data]);
 
-  if (loading && showLoader) {
-    return <div className='h-[90vh] w-full flex items-center justify-center flex-col'>Loading...</div>;
-  }
+  return (
+    <div
+      className="min-h-screen text-white flex flex-col justify-center items-center p-6"
+      style={{
+        backgroundImage: "url('/ucek.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        filter: "sepia(0.4) saturate(1) contrast(1) brightness(0.9)",
+      }}
+    >
+      <div className="bg-black/50 p-6 rounded-xl shadow-md backdrop-blur-md border border-gray-700 w-full max-w-2xl text-center">
+        <h2 className="text-2xl font-bold mb-4">Available Downloads</h2>
 
- return (
-  <div className='h-[90vh] w-full flex items-center justify-center flex-col'>
-    <h2 className='font-bold'>Available downloads</h2>
-
-    {loading && showLoader ? (
-      <div>Loading...</div>
-    ) : filteredData.length > 0 ? (
-      filteredData.map((row: Row, index: number) => {
-        const [col1, col2, col3, col4, col5,col6] = row.c;
-        return (
-          <div key={index}>
-            <ListCard
-             depts={String(col1?.v ?? 'N/A')}
-        types={String(col6?.v ?? 'N/A')}
-        semesters={String(col2?.v ?? 'N/A')}
-        titles={String(col5?.v ?? 'N/A')}
-        subjects={String(col3?.v ?? 'N/A')}
-        links={String(col4?.v ?? 'N/A')}/>
-          </div>
-        );
-      })
-    ) : (
-      <p>No resource found.</p>
-    )}
-  </div>
-);
-;
+        {loading && showLoader ? (
+          <div className="text-white">Loading...</div>
+        ) : filteredData.length > 0 ? (
+          filteredData.map((row: Row, index: number) => {
+            const [col1, col2, col3, col4, col5, col6] = row.c;
+            return (
+              <div key={index} className="mb-4">
+                <ListCard
+                  depts={String(col1?.v ?? 'N/A')}
+                  types={String(col6?.v ?? 'N/A')}
+                  semesters={String(col2?.v ?? 'N/A')}
+                  titles={String(col5?.v ?? 'N/A')}
+                  subjects={String(col3?.v ?? 'N/A')}
+                  links={String(col4?.v ?? 'N/A')}
+                />
+              </div>
+            );
+          })
+        ) : (
+          <p>No resource found.</p>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default GoogleSheetData;
