@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
-import ListCard from '../components/list';
+import ListCard from '../../components/list';
 type Row = {
   c: Array<{ v: string | number | null } | undefined>;
 };

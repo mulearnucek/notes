@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Header() {
@@ -15,7 +16,9 @@ export default function Header() {
 
   return (
     <div className="w-full px-6 py-4 flex justify-between items-center text-white absolute top-0 left-0 z-10">
-      <h1 className="md:ml-8 text-3xl font-bold">KU NOTES</h1>
+      <Link href={'/'}>
+        <h1 className="md:ml-8 text-3xl font-bold">KU NOTES</h1>
+      </Link>
 
       <div className="relative md:mr-5">
         <button

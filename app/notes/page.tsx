@@ -4,13 +4,8 @@ import Link from "next/link";
 
 export default function Notes() {
   return (
-    <div
-      className="min-h-screen bg-cover bg-center flex items-center justify-center px-4"
-      style={{
-        backgroundImage: "url('/ucek.jpg')",
-        filter: "sepia(0.4) saturate(1) contrast(1) brightness(0.9)",
-      }}
-    >
+    <div className="bg-cover bg-center flex items-center justify-center px-4">
+
       <div className="-mt-10 flex flex-col items-center w-full max-w-6xl">
         <div className="text-white text-3xl font-bold mb-14 text-center bg-black/40 px-6 py-4 rounded-2xl backdrop-blur-md shadow-md border-1 border-gray-700">
           Select Department
