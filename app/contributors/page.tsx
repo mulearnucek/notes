@@ -8,8 +8,15 @@ import Image from "next/image";
 import GithubLogo from "@/public/github-logo.svg";
 import { AvatarCard } from "@/components/avatar-card";
 
+type Contributor = {
+  login: string;
+  avatar_url: string;
+  html_url: string;
+};
+
 function Page() {
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<Contributor[]>([]);
+
   useEffect(() => {
     fetch(GITHUB_API_URL)
       .then(async (resp) => {
@@ -20,7 +27,7 @@ function Page() {
       });
   }, []);
 
-  return data.length == 0 ? (
+  return data.length === 0 ? (
     <div className="flex flex-col h-full">
       <Header />
       <div className="flex flex-col items-center justify-center min-h-screen text-white">
@@ -37,30 +44,24 @@ function Page() {
           Contributors
         </div>
         <div className="items-center flex-col sm:flex-row w-full justify-evenly flex md:gap-x-4 gap-y-6 mb-10">
-          {data.map(
-            (contr: {
-              login: string;
-              avatar_url: string;
-              html_url: string;
-            }) => (
-              <div
-                key={contr.login}
-                className="rounded-[24px] backdrop-blur flex flex-col border border-slate-600 p-5"
+          {data.map((contr) => (
+            <div
+              key={contr.login}
+              className="rounded-[24px] backdrop-blur flex flex-col border border-slate-600 p-5"
+            >
+              <AvatarCard url={contr.avatar_url} className="w-44" />
+              <a
+                href={contr.html_url}
+                target="_blank"
+                className="transition-all hover:scale-105 scale-100"
               >
-                <AvatarCard url={contr.avatar_url} className="w-44" />
-                <a
-                  href={contr.html_url}
-                  target="_blank"
-                  className="transition-all hover:scale-105 scale-100"
-                >
-                  <div className="flex justify-center gap-2 items-center mt-5 rounded-lg p-2 border border-white/30">
-                    <Image src={GithubLogo} height={30} width={30} alt="Github Icon"/>
-                    <span className="text-md">@{contr.login}</span>
-                  </div>
-                </a>
-              </div>
-            )
-          )}
+                <div className="flex justify-center gap-2 items-center mt-5 rounded-lg p-2 border border-white/30">
+                  <Image src={GithubLogo} height={30} width={30} alt="Github Icon" />
+                  <span className="text-md">@{contr.login}</span>
+                </div>
+              </a>
+            </div>
+          ))}
         </div>
       </div>
       <Footer />
@@ -69,4 +70,3 @@ function Page() {
 }
 
 export default Page;
-
