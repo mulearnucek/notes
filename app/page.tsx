@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Key, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Footer from "../components/footer";
@@ -8,20 +8,18 @@ import { getModule } from "@/lib/data";
 import { subjectMap } from "@/lib/utils";
 import { IoSearchSharp } from "react-icons/io5";
 import { AiOutlineLoading } from "react-icons/ai";
-
-const recentItems = [
-  { subject: "Data Structures", module: "Module 1", department: "CSE" },
-  { subject: "Digital Electronics", module: "Module 2", department: "ECE" },
-  { subject: "Computer Networks", module: "Module 3", department: "IT" },
-  { subject: "Operating Systems", module: "Module 1", department: "CSE" },
-  { subject: "Signals & Systems", module: "Module 2", department: "ECE" },
-];
+import { link } from "fs";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [errorMsg, setErrorMsg] = useState<String>();
   const [loading, setLoading] = useState(false);
+  const [recentItems, setRecentItems] = useState(
+    localStorage.getItem("recentSearches")
+      ? JSON.parse(localStorage.getItem("recentSearches") || "[]")
+      : []
+  );
 
   const router = useRouter();
 
@@ -65,10 +63,10 @@ export default function Home() {
     }
 
     if (!sem || !subject || !module) {
-    setLoading(false);
-    setErrorMsg(
-      "Please provide a valid search query in the format: semester, subject, module (e.g., 's2, chem, mod1')"
-    );
+      setLoading(false);
+      setErrorMsg(
+        "Please provide a valid search query in the format: semester, subject, module (e.g., 's2, chem, mod1')"
+      );
       throw new Error("Invalid input format");
     }
 
@@ -78,14 +76,40 @@ export default function Home() {
     response
       .then((data) => {
         if (data.length === 0) {
-            setErrorMsg(
-                `No data found for ${dept} - Semester ${sem}, Subject: ${subject}, Module: ${module}`
-            );
+          setErrorMsg(
+            `No data found for ${dept} - Semester ${sem}, Subject: ${subject}, Module: ${module}`
+          );
           console.error("No data found for the given query.");
           return;
         }
-        console.log("Data retrieved:", data);
-        router.push(data[0][0]);
+        setErrorMsg("");
+        const existingSearches = JSON.parse(
+          localStorage.getItem("recentSearches") || "[]"
+        );
+
+        const newSearch = {
+          subject: subject,
+          module: `Module ${module}`,
+          department: dept,
+          link: data[0][0],
+        };
+
+        // Add new search to beginning of array and limit to 5 items
+        const updatedSearches = [
+          newSearch,
+          ...existingSearches.filter(
+            (item: any) =>
+              !(
+                item.subject === subject &&
+                item.module === `Module ${module}` &&
+                item.department === dept
+              )
+          ),
+        ].slice(0, 3);
+
+        localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
+
+        window.open(data[0][0], "_blank");
       })
       .catch((error: any) => {
         console.error("Error fetching data:", error);
@@ -93,12 +117,6 @@ export default function Home() {
   }
 
   const departments = ["CSE", "ECE", "IT"];
-
-  const handleRecentItemClick = (item) => {
-    // Handle recent item click - you can navigate or perform any action
-    console.log("Clicked recent item:", item);
-    // Example: router.push(`/subject/${item.subject}/module/${item.module}`);
-  };
 
   const getPlaceholderText = () => {
     if (!selectedDepartment) return "Select department first";
@@ -114,11 +132,6 @@ export default function Home() {
         return 'e.g., "s2, subject, mod1"';
     }
   };
-
-  // Filter recent items by selected department
-  const filteredRecentItems = selectedDepartment
-    ? recentItems.filter((item) => item.department === selectedDepartment)
-    : recentItems;
 
   return (
     <div className="bg-cover bg-center px-4 md:pt-40 flex flex-col items-center pt-32">
@@ -166,11 +179,9 @@ export default function Home() {
         </div>
         {/* Error message */}
         {errorMsg && (
-        <div className="mt-2 text-center bg-black p-1 px-3 rounded-lg">
-          <p className="text-red-600 text-sm">
-           {errorMsg}
-          </p>
-        </div>
+          <div className="mt-2 text-center bg-black p-1 px-3 rounded-lg">
+            <p className="text-red-600 text-sm">{errorMsg}</p>
+          </div>
         )}
       </form>
 
@@ -201,7 +212,7 @@ export default function Home() {
           item === "Notes" ? (
             <Link
               key={item}
-              href="/notes"
+              href={selectedDepartment.toLowerCase()}
               className="bg-black/30 hover:bg-black/60 transition text-white text-lg font-semibold md:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center"
             >
               {item}
@@ -218,29 +229,38 @@ export default function Home() {
       </div>
 
       <div className="w-full max-w-2xl text-white">
-        <p className="text-base font-semibold mb-4">
-          RECENT {selectedDepartment && `- ${selectedDepartment}`}
-        </p>
-        {filteredRecentItems.length > 0 ? (
-          filteredRecentItems.map((item, i) => (
-            <div
-              key={i}
-              onClick={() => handleRecentItemClick(item)}
-              className="bg-black/50 px-6 py-4 rounded-xl mb-4 flex justify-between items-center backdrop-blur-[.17rem] text-lg cursor-pointer hover:bg-black/70 transition-all duration-200 group"
-            >
-              <div className="flex flex-col">
-                <span className="font-semibold text-white group-hover:text-blue-300 transition-colors">
-                  {item.subject}
+        <p className="text-base font-semibold mb-4">RECENT SEARCHES</p>
+        {recentItems.length > 0 ? (
+          recentItems.map(
+            (
+              item: {
+                subject: any;
+                module: any;
+                department: string;
+                link: string;
+              },
+              i: Key | null | undefined
+            ) => (
+              <Link
+                href={item.link}
+                target="_blank"
+                key={i}
+                className="bg-black/50 px-6 py-4 rounded-xl mb-4 flex justify-between items-center backdrop-blur-[.17rem] text-lg cursor-pointer hover:bg-black/70 transition-all duration-200 group"
+              >
+                <div className="flex flex-col">
+                  <span className="font-semibold text-white group-hover:text-blue-300 transition-colors">
+                    {item.subject}
+                  </span>
+                  <span className="text-sm text-white/70 mt-1">
+                    {item.module}
+                  </span>
+                </div>
+                <span className="text-white/70 group-hover:text-white transition-colors transform group-hover:translate-x-1">
+                  &gt;
                 </span>
-                <span className="text-sm text-white/70 mt-1">
-                  {item.module}
-                </span>
-              </div>
-              <span className="text-white/70 group-hover:text-white transition-colors transform group-hover:translate-x-1">
-                &gt;
-              </span>
-            </div>
-          ))
+              </Link>
+            )
+          )
         ) : (
           <div className="bg-black/30 px-6 py-4 rounded-xl mb-4 text-center text-white/70">
             {selectedDepartment
