@@ -8,3 +8,12 @@ export function getSubjectSlug(sub:string): string {
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const subjectMap = {
+  maths: ["math", "maths", "mathematics"],
+  physics: ["phys", "phiscs", "physics", "phy", "ph"],
+  chemistry: ["chem", "chemsitry", "chemistry"],
+  biology: ["bio", "biology"],
+  english: ["eng", "english", "englsh"],
+  // Add more as needed
+};

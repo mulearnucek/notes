@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "../components/header";
-import Footer from "../components/footer";
 
 export const metadata: Metadata = {
   title: "Notes UCEK",
@@ -23,7 +22,7 @@ export default function RootLayout({
           </div>
           {children}
         </div>
-        <Footer />
+      
       </body>
     </html>
   );

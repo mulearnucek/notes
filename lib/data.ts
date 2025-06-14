@@ -32,6 +32,19 @@ export function getModules(dept: string, sem: string, subject: string) {
   });
 }
 
+export async function getModule(dept: string, sem: string, subject: string, module: string) {  
+  const query = `SELECT G WHERE C = '${dept.toUpperCase()}' AND D = ${sem} AND E = '${subject.toUpperCase()}' AND F = ${module}`;
+  
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=notes&tq=` +
+    encodeURIComponent(query);
+  
+  try {
+    return await getData(url);
+  } catch (error) {
+    console.error("Fetch failed:", error); 
+    return [];
+  }
+}
 
 
 export function getSubjects(dept: string, sem: string) {
