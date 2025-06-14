@@ -3,24 +3,48 @@ import { getModules } from "@/lib/data";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function Page({ params }: { params: { sem: string, dept: string, subject: string } }) {
+export default function Page({ params }: { params: Promise<{ sem: string, dept: string, subject: string }> }) {
     
     const [modules, setModules] = useState<string[][]>();
-    const { sem, dept: branch, subject: sub } = params;
-    const dept = branch.toLowerCase();
-    const subject = sub.toLowerCase().replace(/-/g, " ");
+    const [paramsData, setParamsData] = useState<{ sem: string, dept: string, subject: string } | null>(null);
 
     useEffect(() => {
+        const loadParams = async () => {
+            const resolvedParams = await params;
+            setParamsData(resolvedParams);
+        };
+        loadParams();
+    }, [params]);
+
+    useEffect(() => {
+        if (!paramsData) return;
+        
+        const dept = paramsData.dept.toLowerCase();
+        const subject = paramsData.subject.toLowerCase().replace(/-/g, " ");
+        
         const fetchModules = async () => {
             try {
-                setModules(await getModules(dept, sem, subject));
+                setModules(await getModules(dept, paramsData.sem, subject));
             } catch (error) {
                 console.error("Error fetching modules:", error);
             }
         };
 
         fetchModules();
-    }, []);
+    }, [paramsData]);
+
+    if (!paramsData) {
+        return (
+            <div className="text-center mt-10 text-white flex flex-col items-center">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white mb-4"></div>
+                Loading...
+            </div>
+        );
+    }
+
+    const { sem, dept: branch, subject: sub } = paramsData;
+    const dept = branch.toLowerCase();
+    const subject = sub.toLowerCase().replace(/-/g, " ");
     
     
     

@@ -9,7 +9,7 @@ export function getData(url: string): Promise<string[][]> {
       download: true,
       skipEmptyLines: true,
       complete(results) {
-        let d = results.data;
+        const d = results.data;
         d.shift(); // Remove header row
         resolve(d);
       },

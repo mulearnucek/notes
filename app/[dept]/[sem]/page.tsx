@@ -3,24 +3,43 @@ import { getSubjects } from "@/lib/data";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function Page({ params }: { params: { sem: string; dept: string } }) {
+export default function Page({ params }: { params: Promise<{ sem: string; dept: string }> }) {
   const [subjects, setSubjects] = useState<string[]>();
-
-  const resolvedParams = params;
-  const semNumber = resolvedParams.sem;
-  const dept = resolvedParams.dept.toLowerCase();
+  const [resolvedParams, setResolvedParams] = useState<{ sem: string; dept: string } | null>(null);
 
   useEffect(() => {
+    const resolveParams = async () => {
+      const resolved = await params;
+      setResolvedParams(resolved);
+    };
+    resolveParams();
+  }, [params]);
+
+  useEffect(() => {
+    if (!resolvedParams) return;
+    
     const fetchSubjects = async () => {
       try {
-        setSubjects(await getSubjects(dept, semNumber));
+        setSubjects(await getSubjects(resolvedParams.dept.toLowerCase(), resolvedParams.sem));
       } catch (error) {
         console.error("Error fetching subjects:", error);
       }
     };
 
     fetchSubjects();
-  }, []);
+  }, [resolvedParams]);
+
+  if (!resolvedParams) {
+    return (
+      <div className="text-center mt-10 text-white flex flex-col items-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white mb-4"></div>
+        Loading...
+      </div>
+    );
+  }
+
+  const semNumber = resolvedParams.sem;
+  const dept = resolvedParams.dept.toLowerCase();
 
   if (!["cse", "ece", "it"].includes(dept)) {
     return <div className="text-center mt-10 text-white">Invalid department: {dept}</div>;

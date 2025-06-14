@@ -9,7 +9,7 @@ import GithubLogo from "@/public/github-logo.svg";
 import { AvatarCard } from "@/components/avatar-card";
 
 function Page() {
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState([]);
   useEffect(() => {
     fetch(GITHUB_API_URL)
       .then(async (resp) => {

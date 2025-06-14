@@ -1,27 +1,37 @@
 "use client";
 
-import { Key, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Key, useState, useEffect } from "react";
 import Link from "next/link";
 import Footer from "../components/footer";
 import { getModule } from "@/lib/data";
 import { subjectMap } from "@/lib/utils";
 import { IoSearchSharp } from "react-icons/io5";
 import { AiOutlineLoading } from "react-icons/ai";
-import { link } from "fs";
+
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("");
-  const [errorMsg, setErrorMsg] = useState<String>();
+  const [errorMsg, setErrorMsg] = useState<string>();
   const [loading, setLoading] = useState(false);
-  const [recentItems, setRecentItems] = useState(
-    localStorage.getItem("recentSearches")
-      ? JSON.parse(localStorage.getItem("recentSearches") || "[]")
-      : []
-  );
+  const [recentItems, setRecentItems] = useState<{
+    subject: string;
+    module_: string;
+    department: string;
+    link: string;
+  }[]>([]);
 
-  const router = useRouter();
+
+  // Load recent searches from localStorage on initial render
+  useEffect(() => {
+    const storedSearches = localStorage.getItem("recentSearches");
+    if (storedSearches) {
+      setRecentItems(JSON.parse(storedSearches));
+    } else {
+      setRecentItems([]);
+    }
+  }, []);
+
 
   function handleSearch(event: { preventDefault: () => void }) {
     setLoading(true);
@@ -39,7 +49,7 @@ export default function Home() {
       .split(/[\s,]+/)
       .filter(Boolean);
 
-    let sem, module, subject;
+    let sem, module_, subject;
 
     const getStandardSubject = (word: string) => {
       for (const [standard, variants] of Object.entries(subjectMap)) {
@@ -50,19 +60,19 @@ export default function Home() {
       return word; // fallback to original if no match
     };
 
-    for (let part of parts) {
+    for (const part of parts) {
       if (/^(s|sem)[-]?\d+$/i.test(part)) {
         const match = part.match(/\d+/);
         if (match) sem = match[0];
       } else if (/^m(od(ule)?)?-?\d+$/i.test(part)) {
         const match = part.match(/\d+/);
-        if (match) module = match[0];
+        if (match) module_ = match[0];
       } else if (!subject) {
         subject = getStandardSubject(part);
       }
     }
 
-    if (!sem || !subject || !module) {
+    if (!sem || !subject || !module_) {
       setLoading(false);
       setErrorMsg(
         "Please provide a valid search query in the format: semester, subject, module (e.g., 's2, chem, mod1')"
@@ -70,14 +80,14 @@ export default function Home() {
       throw new Error("Invalid input format");
     }
 
-    const response = getModule(dept, sem, subject, module);
+    const response = getModule(dept, sem, subject, module_);
     setLoading(false);
 
     response
       .then((data) => {
         if (data.length === 0) {
           setErrorMsg(
-            `No data found for ${dept} - Semester ${sem}, Subject: ${subject}, Module: ${module}`
+            `No data found for ${dept} - Semester ${sem}, Subject: ${subject}, Module: ${module_}`
           );
           console.error("No data found for the given query.");
           return;
@@ -89,7 +99,7 @@ export default function Home() {
 
         const newSearch = {
           subject: subject,
-          module: `Module ${module}`,
+          module_: `Module ${module_}`,
           department: dept,
           link: data[0][0],
         };
@@ -98,22 +108,22 @@ export default function Home() {
         const updatedSearches = [
           newSearch,
           ...existingSearches.filter(
-            (item: any) =>
+            (item: { subject: string; module_: string; department: string; }) =>
               !(
                 item.subject === subject &&
-                item.module === `Module ${module}` &&
+                item.module_ === `Module ${module_}` &&
                 item.department === dept
               )
           ),
         ].slice(0, 3);
 
         localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
+        setRecentItems(updatedSearches);
 
         window.open(data[0][0], "_blank");
       })
-      .catch((error: any) => {
-        console.error("Error fetching data:", error);
-      });
+
+
   }
 
   const departments = ["CSE", "ECE", "IT"];
@@ -174,7 +184,7 @@ export default function Home() {
         {/* Format suggestion */}
         <div className="mt-2 text-center">
           <p className="text-white/60 text-sm">
-            Search format: semester, subject, module (e.g., "s2, chem, mod1")
+            Search format: semester, subject, module (e.g., &quot;s2, chem, mod1&quot;)
           </p>
         </div>
         {/* Error message */}
@@ -227,15 +237,18 @@ export default function Home() {
           )
         )}
       </div>
-
+      
+      {
+        recentItems.length > 0 && (
+      
       <div className="w-full max-w-2xl text-white">
         <p className="text-base font-semibold mb-4">RECENT SEARCHES</p>
         {recentItems.length > 0 ? (
           recentItems.map(
             (
               item: {
-                subject: any;
-                module: any;
+                subject: string;
+                module_: string;
                 department: string;
                 link: string;
               },
@@ -252,7 +265,7 @@ export default function Home() {
                     {item.subject}
                   </span>
                   <span className="text-sm text-white/70 mt-1">
-                    {item.module}
+                    {item.module_}
                   </span>
                 </div>
                 <span className="text-white/70 group-hover:text-white transition-colors transform group-hover:translate-x-1">
@@ -269,6 +282,7 @@ export default function Home() {
           </div>
         )}
       </div>
+        )}
       <Footer />
     </div>
   );
