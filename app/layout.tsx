@@ -14,11 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="bg-no-repeat bg-cover bg-center bg-[url('https://random-image-pepebigotes.vercel.app/api/random-image')] backdrop-brightness-50 bg-black/50">
+    <html lang="en">      <body className="bg-no-repeat bg-cover bg-center bg-[url('https://random-image-pepebigotes.vercel.app/api/random-image')] backdrop-brightness-50 bg-black/50">
         <DataProvider>
         <Header />
-          <div className="min-h-screen text-white flex flex-col justify-center items-center p-6">
+          <div className="min-h-screen text-white flex flex-col justify-center items-center p-4 sm:p-6">
             <div className="absolute inset-0 -z-10">
               <div className="w-full h-full bg-[url('https://random-image-pepebigotes.vercel.app/api/random-image')] bg-no-repeat bg-cover bg-center sepia-50 brightness-75 "></div>
             </div>

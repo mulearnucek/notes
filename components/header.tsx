@@ -15,22 +15,21 @@ export default function Header() {
     setDept(dept);
     setIsOpen(false);
   };
-
   return (
-    <div className="w-full px-6 py-4 flex justify-between items-center text-white absolute top-0 left-0 z-10">
+    <div className="w-full px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center text-white absolute top-0 left-0 z-10">
       <Link href={'/'}>
-       <Logo className="text-xl sm:" />
+       <Logo className="text-lg sm:text-xl" />
       </Link>
 
       <div className="relative items-center flex-col">
-        <div className="hidden md:block">Department</div>
+        <div className="hidden md:block text-sm">Department</div>
         <button
           onClick={toggleDropdown}
           className="cursor-pointer flex justify-between items-center focus:outline-none"
         >
-          <span className="text-lg font-medium mr-[3px]">{dept==''? "Select" : dept}</span>
+          <span className="text-base sm:text-lg font-medium mr-1 sm:mr-[3px]">{dept==''? "Select" : dept}</span>
           <svg
-            className="mt-[2px] size-6 text-gray-200"
+            className="mt-[2px] w-5 h-5 sm:w-6 sm:h-6 text-gray-200"
             viewBox="0 0 20 20"
             fill="currentColor"
             aria-hidden="true"
@@ -42,15 +41,13 @@ export default function Header() {
               clipRule="evenodd"
             />
           </svg>
-        </button>
-
-        {isOpen && (
-          <div className="absolute right-0 mt-2 w-28 bg-black/70 text-white rounded-md shadow-lg z-20 border-[1px] border-gray-600">
+        </button>        {isOpen && (
+          <div className="absolute right-0 mt-2 w-24 sm:w-28 bg-black/70 text-white rounded-md shadow-lg z-20 border-[1px] border-gray-600">
             {departments.map((d) => (
               <div
                 key={d}
                 onClick={() => handleSelect(d)}
-                className="px-4 py-2 hover:bg-white/10 cursor-pointer rounded-md"
+                className="px-3 sm:px-4 py-2 hover:bg-white/10 cursor-pointer rounded-md text-sm sm:text-base"
               >
                 {d}
               </div>
