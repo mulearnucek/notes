@@ -5,6 +5,10 @@ export function getSubjectSlug(sub:string): string {
   return sub.toLowerCase().replace(/\s+/g, '-');
 }
 
+export function getSubjectNameFromSlug(slug: string): string {
+  return slug.toLowerCase().replace(/-/g, " ");
+  }
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }

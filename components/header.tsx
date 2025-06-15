@@ -3,17 +3,17 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Logo } from "./logo";
+import { useDataContext } from "@/lib/DataContext";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedDept, setSelectedDept] = useState(localStorage.getItem("dept") || "Select");
-  const dept = ["CSE", "ECE", "IT"];
+  const {dept, setDept} = useDataContext();
+  const departments = ["CSE", "ECE", "IT"];
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
   const handleSelect = (dept: string) => {
-    setSelectedDept(dept);
+    setDept(dept);
     setIsOpen(false);
-    localStorage.setItem("dept", dept);
   };
 
   return (
@@ -28,7 +28,7 @@ export default function Header() {
           onClick={toggleDropdown}
           className="cursor-pointer flex justify-between items-center focus:outline-none"
         >
-          <span className="text-lg font-medium mr-[3px]">{selectedDept}</span>
+          <span className="text-lg font-medium mr-[3px]">{dept==''? "Select" : dept}</span>
           <svg
             className="mt-[2px] size-6 text-gray-200"
             viewBox="0 0 20 20"
@@ -46,7 +46,7 @@ export default function Header() {
 
         {isOpen && (
           <div className="absolute right-0 mt-2 w-28 bg-black/70 text-white rounded-md shadow-lg z-20 border-[1px] border-gray-600">
-            {dept.map((d) => (
+            {departments.map((d) => (
               <div
                 key={d}
                 onClick={() => handleSelect(d)}

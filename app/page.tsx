@@ -3,16 +3,21 @@
 import { Key, useState, useEffect } from "react";
 import Link from "next/link";
 import Footer from "../components/footer";
-import { subjectMap } from "@/lib/utils";
+import { getSubjectSlug, subjectMap } from "@/lib/utils";
 import { IoSearchSharp } from "react-icons/io5";
 import { AiOutlineLoading } from "react-icons/ai";
+import { getModule } from "@/lib/data";
+import { useDataContext } from "@/lib/DataContext";
+import { useRouter } from "next/navigation";
 
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState(localStorage.getItem("dept") || "");
   const [errorMsg, setErrorMsg] = useState<string>();
   const [loading, setLoading] = useState(false);
+  const router = useRouter()
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const {db, dept} = useDataContext();
   const [recentItems, setRecentItems] = useState<{
     subject: string;
     module_: string;
@@ -42,7 +47,7 @@ export default function Home() {
     }
   }
 
-  function parseAndBuildQuery(searchQuery: string, dept = selectedDepartment) {
+  function parseAndBuildQuery(searchQuery: string) {
     const parts = searchQuery
       .toLowerCase()
       .split(/[\s,]+/)
@@ -70,6 +75,30 @@ export default function Home() {
         subject = getStandardSubject(part);
       }
     }
+
+    // Condition: If only subject is provided
+    if (!sem && !module_ && subject !== undefined) {
+      const r1 = db?.query({
+        where: {
+          Department: dept.toUpperCase(),
+          Subject: subject.toUpperCase(),
+        }
+      });
+
+      const r2 = db?.query({
+        where: {
+          Subject: subject.toUpperCase(),
+        },
+      });
+
+      const result = r1?.length ==0 ? r2 : r1;
+
+      if (result && result.length > 0) {
+        router.push(`/${result[0].Department}/${result[0].Semester}/${getSubjectSlug(result[0].Subject)}`);
+        return;
+      }
+    }
+
 
     if (!sem || !subject || !module_) {
       setLoading(false);
@@ -123,21 +152,34 @@ export default function Home() {
       })
 
 
-  }
+  }  
+  const departmentPlaceholders = {
+    CSE: ['s3 dsa mod1', 's5 os m2', 's4, dbms, module3'],
+    ECE: ['s4, signals, mod2', 's3, circuits, mod1', 's5, control, mod2'],
+    IT: ['s6, networks, mod3', 's4, webdev, mod1', 's5, security, mod2'],
+    default: ['s2, subject, mod1', 's3, topic, mod2', 's4, course, mod3']
+  };
+
+  useEffect(() => {
+    if (!dept) return;
+    
+    const interval = setInterval(() => {
+      setPlaceholderIndex(prev => 
+        (prev + 1) % (departmentPlaceholders[dept as keyof typeof departmentPlaceholders] || 
+        departmentPlaceholders.default).length
+      );
+    }, 3000); // Change placeholder every 3 seconds
+    
+    return () => clearInterval(interval);
+  }, [dept]);
 
   const getPlaceholderText = () => {
-    if (!selectedDepartment) return "Select department first";
-
-    switch (selectedDepartment) {
-      case "CSE":
-        return 'e.g., "s3, dsa, mod1"';
-      case "ECE":
-        return 'e.g., "s4, signals, mod2"';
-      case "IT":
-        return 'e.g., "s6, networks, mod3"';
-      default:
-        return 'e.g., "s2, subject, mod1"';
-    }
+    if (!dept) return "Select department first";
+    
+    const placeholders = departmentPlaceholders[dept as keyof typeof departmentPlaceholders] || 
+      departmentPlaceholders.default;
+    
+    return placeholders[placeholderIndex];
   };
 
   return (
@@ -145,25 +187,25 @@ export default function Home() {
       <form onSubmit={handleSearch} className="w-full max-w-2xl mb-6">
         <div className="bg-black/40 p-4 rounded-2xl flex items-center backdrop-blur-md">
           <input
-            placeholder={getPlaceholderText()}
+            placeholder={"Search: " + getPlaceholderText()}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            disabled={!selectedDepartment}
+            disabled={!dept}
             className={`flex-grow bg-transparent text-white outline-none px-4 text-lg placeholder-white/70 ${
-              !selectedDepartment ? "cursor-not-allowed opacity-60" : ""
-            }`}
+              !dept ? "cursor-not-allowed opacity-60" : ""
+            } transition-colors duration-300`}
           />
 
           {!loading ? (
             <button
               className={`px-3  ${
-                !selectedDepartment
+                !dept
                   ? "opacity-50 cursor-not-allowed"
                   : "cursor-pointer"
               } transition-all duration-200`}
               type="submit"
-              disabled={!selectedDepartment}
+              disabled={!dept}
             >
               <IoSearchSharp size={25} />
             </button>
@@ -219,7 +261,7 @@ export default function Home() {
           item === "Notes" ? (
             <Link
               key={item}
-              href={selectedDepartment.toLowerCase()}
+              href={dept.toLowerCase()}
               className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-lg font-semibold md:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center"
             >
               {item}
@@ -258,7 +300,7 @@ export default function Home() {
                 className="bg-black/50 px-6 py-4 rounded-xl mb-4 flex justify-between items-center backdrop-blur-[.17rem] text-lg cursor-pointer hover:bg-black/70 transition-all duration-200 group"
               >
                 <div className="flex flex-col">
-                  <span className="font-semibold text-white group-hover:text-blue-300 transition-colors">
+                  <span className="font-semibold text-white group-hover:text-blue-300 transition-colors capitalize">
                     {item.subject}
                   </span>
                   <span className="text-sm text-white/70 mt-1">
@@ -273,8 +315,8 @@ export default function Home() {
           )
         ) : (
           <div className="bg-black/30 px-6 py-4 rounded-xl mb-4 text-center text-white/70">
-            {selectedDepartment
-              ? `No recent items for ${selectedDepartment}`
+            {dept
+              ? `No recent items for ${dept}`
               : "Select a department to see recent items"}
           </div>
         )}
