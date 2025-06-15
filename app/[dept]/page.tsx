@@ -22,6 +22,28 @@ export default async function Dept({
         {/* Heading */}
         <div className="text-white text-3xl font-bold mb-14 text-center bg-black/40 px-6 py-4 rounded-2xl backdrop-blur-md shadow-md">
           Select the Semester
+          <div className="w-full border-t border-gray-700 mt-3 pt-2 text-center text-gray-400 text-sm">
+            <nav className="text-sm text-gray-400" aria-label="Breadcrumb">
+              <ol className="list-reset flex">
+                <li>
+                  <Link href="/" className="hover:underline text-gray-300">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <span className="mx-2">/</span>
+                </li>
+                <li>
+                  <Link
+                    href={`/${title.toLowerCase()}`}
+                    className="hover:underline text-gray-300"
+                  >
+                    {title.toUpperCase()}
+                  </Link>
+                </li>
+              </ol>
+            </nav>
+          </div>
         </div>
 
         {/* Cards */}

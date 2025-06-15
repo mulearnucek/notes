@@ -1,20 +1,44 @@
+"use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect } from 'react';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { SHEET_ID } from './data';
+import Papa from 'papaparse';
+import { CSQL } from './csql';
+import Loading from '@/app/loading';
 
 type DataContextType = {
-    data: any;
-    setData: React.Dispatch<React.SetStateAction<any>>;
+    db: CSQL | undefined;
+    setDb: React.Dispatch<React.SetStateAction<any>>;
 };
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider = ({ children }: { children: ReactNode }) => {
-    const [data, setData] = useState<any>(null);
+    const [db, setDb] = useState<CSQL>();
+
+    useEffect(() => {
+        Papa.parse(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=notes`, {
+            download: true,
+            header: true,
+            complete: (results) => {
+                if (results.errors.length > 0) {
+                    console.error('Error loading database:', results.errors);
+                } else {
+                    setDb(new CSQL(results.data));
+                }
+            },
+            error: (error) => {
+                console.error('Error parsing CSV:', error);
+            }
+        });
+    }, []);
+        
 
     return (
-        <DataContext.Provider value={{ data, setData }}>
-            {children}
+        <DataContext.Provider value={{ db, setDb }}>
+            {db? children : <Loading msg="Getting your notes..." />}
         </DataContext.Provider>
     );
 };

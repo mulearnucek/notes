@@ -12,6 +12,7 @@
     "@radix-ui/react-avatar": "^1.1.10",
     "clsx": "^2.1.1",
     "framer-motion": "^12.17.0",
+    "lodash": "^4.17.21",
     "next": "15.3.2",
     "papaparse": "^5.5.3",
     "react": "^19.0.0",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/lodash": "^4.17.17",
     "@types/node": "^20",
     "@types/papaparse": "^5.3.16",
     "@types/react": "^19",

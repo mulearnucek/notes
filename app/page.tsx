@@ -3,7 +3,6 @@
 import { Key, useState, useEffect } from "react";
 import Link from "next/link";
 import Footer from "../components/footer";
-import { getModule } from "@/lib/data";
 import { subjectMap } from "@/lib/utils";
 import { IoSearchSharp } from "react-icons/io5";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -11,7 +10,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState(localStorage.getItem("dept") || "");
   const [errorMsg, setErrorMsg] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [recentItems, setRecentItems] = useState<{
@@ -84,7 +83,7 @@ export default function Home() {
     setLoading(false);
 
     response
-      .then((data) => {
+      .then((data: string | any[]) => {
         if (data.length === 0) {
           setErrorMsg(
             `No data found for ${dept} - Semester ${sem}, Subject: ${subject}, Module: ${module_}`
@@ -125,8 +124,6 @@ export default function Home() {
 
 
   }
-
-  const departments = ["CSE", "ECE", "IT"];
 
   const getPlaceholderText = () => {
     if (!selectedDepartment) return "Select department first";
@@ -196,7 +193,7 @@ export default function Home() {
       </form>
 
       {/* Department Toggle Buttons */}
-      <div className="w-full max-w-2xl mb-8">
+      {/* <div className="w-full max-w-2xl mb-8">
         <p className="text-white text-base font-semibold mb-3 text-center">
           Select Department
         </p>
@@ -215,7 +212,7 @@ export default function Home() {
             </button>
           ))}
         </div>
-      </div>
+      </div> */}
 
       <div className="grid grid-cols-3 gap-4 w-full max-w-2xl mb-12">
         {["Question Paper", "Notes", "Syllabus"].map((item) =>
@@ -223,14 +220,14 @@ export default function Home() {
             <Link
               key={item}
               href={selectedDepartment.toLowerCase()}
-              className="bg-black/30 hover:bg-black/60 transition text-white text-lg font-semibold md:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center"
+              className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-lg font-semibold md:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center"
             >
               {item}
             </Link>
           ) : (
             <button
               key={item}
-              className="bg-black/30 hover:bg-black/50 transition text-white text-lg font-semibold md:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full"
+              className="bg-black/30 hover:bg-black/50 cursor-pointer transition text-white text-lg font-semibold md:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full"
             >
               {item}
             </button>
