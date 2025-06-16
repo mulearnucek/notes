@@ -1,12 +1,25 @@
 "use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function Home() {
     const [searchQuery, setSearchQuery] = useState("");
+    const [recentModules, setRecentModules] = useState<
+        { module: string; subject: string; sem: string; dept: string; url: string }[]
+    >([]);
     const router = useRouter();
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            try {
+                const recent = JSON.parse(localStorage.getItem("recent-modules") || "[]");
+                setRecentModules(recent.slice(0, 5));
+            } catch {
+                setRecentModules([]);
+            }
+        }
+    }, []);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -16,7 +29,7 @@ export default function Home() {
     };
 
     return (
-        <div className="bg-cover bg-center px-4 md:pt-40 flex flex-col items-center pt-32">
+        <div className="bg-cover bg-center px-4 md:pt-40 flex flex-col items-center pt-32 -mt-12">
             <form onSubmit={handleSearch} className="w-full max-w-2xl mb-10">
                 <div className="bg-black/40 p-4 rounded-2xl flex items-center backdrop-blur-md">
                     <input
@@ -38,7 +51,6 @@ export default function Home() {
                     </button>
                 </div>
             </form>
-
 
             <div className="grid grid-cols-3 gap-4 w-full max-w-2xl mb-12">
                 {["Question Paper", "Notes", "Syllabus"].map((item) =>
@@ -63,16 +75,39 @@ export default function Home() {
 
             <div className="w-full max-w-2xl text-white">
                 <p className="text-base font-semibold mb-4">RECENT</p>
-                {["Module 1", "Module 2", "Module 3"].map((mod, i) => (
-                    <div
-                        key={i}
-                        className="bg-black/50 px-6 py-4 rounded-xl mb-4 flex justify-between items-center backdrop-blur-[.17rem] text-lg"
-                    >
-                        <span className="pointer-events-none">{mod}</span>
-                        <span className="pointer-events-none">&gt;</span>
-                    </div>
-                ))}
+                <div
+                    className="flex flex-col gap-4 overflow-y-auto max-h-72 pr-2 no-scrollbar"
+    >
+                    {recentModules.length === 0 ? (
+                        <div className="bg-black/50 px-6 py-4 rounded-xl flex justify-between items-center backdrop-blur-[.17rem] text-lg text-gray-400">
+                            No recent modules viewed.
+                        </div>
+                    ) : (
+                        recentModules.slice(0, 5).map((mod, i) => (
+                            <Link
+                                key={mod.url}
+                                href={mod.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-black/50 px-6 py-3 sm:py-3 rounded-xl flex justify-between items-center backdrop-blur-[.17rem] hover:bg-black/70 transition group"
+                            >
+                                <div>
+                                    <div className="text-md sm:text-lg font-bold capitalize">
+                                        {mod.subject} - Module {mod.module}
+                                    </div>
+                                    <div className="text-sm text-gray-300 mt-1 uppercase">
+                                        {mod.dept} | Sem {mod.sem}
+                                    </div>
+                                </div>
+                                <span className="ml-4 text-2xl text-gray-400 group-hover:text-white transition">
+                                    &gt;
+                                </span>
+                            </Link>
+                        ))
+                    )}
+                </div>
             </div>
+
         </div>
     );
 }

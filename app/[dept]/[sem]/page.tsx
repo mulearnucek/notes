@@ -46,7 +46,7 @@ export default function Page({ params }: { params: Promise<{ sem: string; dept: 
   }
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen w-full px-2 sm:px-0">
+    <div className="flex flex-col justify-center items-center w-full px-2 sm:px-0">
       <h1 className="text-white -mt-20 text-2xl sm:text-4xl font-bold mb-8 sm:mb-14 text-center bg-black/40 px-4 sm:px-8 py-3 sm:py-5 rounded-2xl shadow-lg backdrop-blur-md">
         Select Subject
       </h1>
