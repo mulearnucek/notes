@@ -9,6 +9,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { getModule } from "@/lib/data";
 import { useDataContext } from "@/lib/DataContext";
 import { useRouter } from "next/navigation";
+import YouTubePlaylistSection from "@/components/PlaylistCard";
 
 
 export default function Home() {
@@ -99,6 +100,46 @@ export default function Home() {
       }
     }
 
+    // Condition: If only semester is provided
+    if (sem && !subject && !module_) {
+      const result = db?.query({
+        where: {
+          Department: dept.toUpperCase(),
+          Semester: sem,
+        },
+      });
+
+      if (result && result.length > 0) {
+        router.push(`/${result[0].Department}/${result[0].Semester}`);
+        return;
+      }
+    }
+
+    // Condition: If semester and subject are provided
+    if (sem && subject && !module_) {
+      const r1 = db?.query({
+        where: {
+          Department: dept.toUpperCase(),
+          Semester: sem,
+          Subject: subject.toUpperCase(),
+        },
+      });
+
+      const r2 = db?.query({
+        where: {
+          Semester: sem,
+          Subject: subject.toUpperCase(),
+        },
+      });
+
+      const result = r1?.length == 0 ? r2 : r1;
+
+      if (result && result.length > 0) {
+        router.push(`/${result[0].Department}/${result[0].Semester}/${getSubjectSlug(result[0].Subject)}`);
+        return;
+      }
+    } 
+
 
     if (!sem || !subject || !module_) {
       setLoading(false);
@@ -108,29 +149,35 @@ export default function Home() {
       throw new Error("Invalid input format");
     }
 
-    const response = getModule(dept, sem, subject, module_);
+    const response = db?.query({
+      where: {
+        Department: dept.toUpperCase(),
+        Semester: sem,
+        Subject: subject.toUpperCase(),
+        Module: module_,
+      },
+    });
+
     setLoading(false);
+    if (!response || response.length === 0) {
+      setErrorMsg(
+        `No data found for ${dept} - Semester ${sem}, Subject: ${subject}, Module: ${module_}`
+      );
+      console.error("No data found for the given query.");
+      return;
+    }
 
-    response
-      .then((data: string | any[]) => {
-        if (data.length === 0) {
-          setErrorMsg(
-            `No data found for ${dept} - Semester ${sem}, Subject: ${subject}, Module: ${module_}`
-          );
-          console.error("No data found for the given query.");
-          return;
-        }
-        setErrorMsg("");
-        const existingSearches = JSON.parse(
-          localStorage.getItem("recentSearches") || "[]"
-        );
+    setErrorMsg("");
+    const existingSearches = JSON.parse(
+      localStorage.getItem("recentSearches") || "[]"
+    );
 
-        const newSearch = {
-          subject: subject,
-          module_: `Module ${module_}`,
-          department: dept,
-          link: data[0][0],
-        };
+    const newSearch = {
+      subject: subject,
+      module_: `Module ${module_}`,
+      department: dept,
+      link: response[0].File,
+    };
 
         // Add new search to beginning of array and limit to 5 items
         const updatedSearches = [
@@ -148,8 +195,7 @@ export default function Home() {
         localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
         setRecentItems(updatedSearches);
 
-        window.open(data[0][0], "_blank");
-      })
+        window.open(response[0].File, "_blank");
 
 
   }  
@@ -271,8 +317,8 @@ export default function Home() {
               {item}
             </button>
           )
-        )}
-      </div>
+        )}      </div>
+      
         {
         recentItems.length > 0 && (
       

@@ -18,7 +18,7 @@ export default function Header() {
   return (
     <div className="w-full px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center text-white absolute top-0 left-0 z-10">
       <Link href={'/'}>
-       <Logo className="text-lg sm:text-xl" />
+       <Logo className="size-15 md:size-20" />
       </Link>
 
       <div className="relative items-center flex-col">
