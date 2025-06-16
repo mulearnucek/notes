@@ -16,10 +16,13 @@ export type Note = {
 
 export interface PlaylistItem {
   id: string;
-  title: string;
-  playlistUrl: string;
-  module: string;
-  videosCount: number;
+  Title: string;
+  Link: string;
+  Subject: string;
+  Department: string;
+  Semester: string;
+  Module: string;
+  VideosCount: number;
 }
 
 export function getData(url: string): Promise<string[][]> {

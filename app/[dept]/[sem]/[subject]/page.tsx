@@ -17,7 +17,7 @@ export default function Page({
     dept: string;
     subject: string;
   } | null>(null);
-  const { db } = useDataContext();
+  const { db,vldb } = useDataContext();
 
   useEffect(() => {
     const loadParams = async () => {
@@ -52,19 +52,19 @@ export default function Page({
 
     const fetchPlaylists = async () => {
       try {
-        const response = await getVideoPlaylists(dept, sem, subject);
+        const response = vldb?.query({
+          where: {
+            Department: dept.toUpperCase(),
+            Semester: paramsData.sem,
+            Subject: subject.toUpperCase(),
+          },
+          orderBy: "Module",
+        }) || [];
         if (response.length == 0) {
           setPlaylists([]);
-          throw new Error("No playlists found for this subject");
+          return;
         }
-        const data = response.map((item, index) => ({
-          id: `playlist-${index + 1}`,
-          title: item[5],
-          playlistUrl: item[6],
-          module: item[4],
-          videosCount: parseInt(item[7], 10) || 0,
-        }));
-        setPlaylists(data);
+        setPlaylists(response as PlaylistItem[]);
       } catch (error) {
         console.error("Error fetching playlists:", error);
       }
@@ -105,7 +105,7 @@ export default function Page({
   }
 
   return (
-    <div className="text-white flex flex-col justify-center items-center p-6 mt-6">
+    <div className="text-white flex flex-col justify-center items-center p-6 mt-12 md:mt-14 lg:mt-10">
       <div className="w-full max-w-4xl mb-6 bg-black/60 rounded-xl p-5 shadow-md border-gray-700 border">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>

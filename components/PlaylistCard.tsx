@@ -7,11 +7,11 @@ import { PlaylistItem } from '@/lib/data';
 
 
 export const PlaylistCard: React.FC<{ playlist: PlaylistItem }> = ({ playlist }) => {
-    const thumbnail = generateThumbnailUrl(playlist.playlistUrl, 'maxresdefault');
+    const thumbnail = generateThumbnailUrl(playlist.Link, 'maxresdefault');
     
     return (
       <Link
-        href={playlist.playlistUrl}
+        href={playlist.Link}
         target="_blank"
         rel="noopener noreferrer"
         className="group"
@@ -25,7 +25,7 @@ export const PlaylistCard: React.FC<{ playlist: PlaylistItem }> = ({ playlist })
             ) : (
               <img
                 src={thumbnail}
-                alt={playlist.title}
+                alt={playlist.Title}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
               />
             )}
@@ -37,12 +37,12 @@ export const PlaylistCard: React.FC<{ playlist: PlaylistItem }> = ({ playlist })
               </div>
             </div>            {/* Module Badge */}
             <div className="absolute top-1.5 left-1.5 bg-black/70 backdrop-blur-md border border-gray-600 text-white text-xs font-semibold px-1.5 py-0.5 rounded-full">
-              {playlist.module}
+              {playlist.Module}
             </div>
 
             {/* Video Count */}
             <div className="absolute bottom-1.5 right-1.5 bg-black/80 text-white text-xs px-1.5 py-0.5 rounded">
-              {playlist.videosCount} videos
+              {playlist.VideosCount} videos
             </div>
           </div>
 
@@ -54,7 +54,7 @@ export const PlaylistCard: React.FC<{ playlist: PlaylistItem }> = ({ playlist })
                   WebkitLineClamp: 2,
                   WebkitBoxOrient: 'vertical'
                 }}>
-              {playlist.title}
+              {playlist.Title}
             </h3>
             
             <div className="flex items-center justify-between text-xs text-white/70">
