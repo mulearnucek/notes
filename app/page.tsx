@@ -227,7 +227,7 @@ export default function Home() {
     return placeholders[placeholderIndex];
   };
   return (
-    <div className="bg-cover bg-center px-4 sm:px-6 lg:px-8 md:pt-40 flex flex-col items-center pt-32">
+    <div className="bg-cover bg-center px-4 sm:px-6 lg:px-8 md:pt-24 flex flex-col items-center pt-24">
       <form onSubmit={handleSearch} className="w-full max-w-xs sm:max-w-md lg:max-w-2xl mb-6">
         <div className="bg-black/40 p-3 sm:p-4 rounded-2xl flex items-center backdrop-blur-md">
           <input
