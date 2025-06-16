@@ -58,7 +58,9 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                 console.error('Error parsing VLDB CSV:', error);
             }
         });
-    }, []);    useEffect(() => {
+    }, []);    
+    
+    useEffect(() => {
         if (dept) {
             localStorage.setItem('dept', dept);
         }
@@ -75,7 +77,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                 onSelect={handleDepartmentSelect}
                 db={db}
             />
-            {db? children : <Loading msg="Getting your notes..." />}
+            {db && vldb ? children : <Loading msg="Getting your notes..." />}
         </DataContext.Provider>
     );
 };
