@@ -11,7 +11,7 @@ import DepartmentSelectDialog from '@/components/DepartmentSelectDialog';
 
 type DataContextType = {
     db: CSQL | undefined;
-    setDb: React.Dispatch<React.SetStateAction<any>>;
+    vldb: CSQL | undefined;
     dept: string;
     setDept: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -20,6 +20,7 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider = ({ children }: { children: ReactNode }) => {
     const [db, setDb] = useState<CSQL>();
+    const [vldb, setVldb] = useState<CSQL>();
     const [dept, setDept] = useState<string>('');
     const [showDeptDialog, setShowDeptDialog] = useState<boolean>(false);    useEffect(() => {
         Papa.parse(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=notes`, {
@@ -42,6 +43,21 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                 console.error('Error parsing CSV:', error);
             }
         });
+
+        Papa.parse(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=playlists`, {
+            download: true,
+            header: true,
+            complete: (results) => {
+                if (results.errors.length > 0) {
+                    console.error('Error loading VLDB:', results.errors);
+                } else {
+                    setVldb(new CSQL(results.data));
+                }
+            },
+            error: (error) => {
+                console.error('Error parsing VLDB CSV:', error);
+            }
+        });
     }, []);    useEffect(() => {
         if (dept) {
             localStorage.setItem('dept', dept);
@@ -53,7 +69,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         setShowDeptDialog(false);
     };
         return (
-        <DataContext.Provider value={{ db, setDb, dept, setDept }}>
+        <DataContext.Provider value={{ db, vldb, dept, setDept }}>
             <DepartmentSelectDialog 
                 isOpen={showDeptDialog} 
                 onSelect={handleDepartmentSelect}

@@ -19,21 +19,20 @@ export default function Home() {
   const router = useRouter()
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const {db, dept} = useDataContext();
-  const [recentItems, setRecentItems] = useState<{
-    subject: string;
-    module_: string;
-    department: string;
-    link: string;
-  }[]>([]);
+  const [recentModules, setRecentModules] = useState<
+    { module: string; subject: string; sem: string; dept: string; url: string }[]
+  >([]);
 
 
   // Load recent searches from localStorage on initial render
   useEffect(() => {
-    const storedSearches = localStorage.getItem("recentSearches");
-    if (storedSearches) {
-      setRecentItems(JSON.parse(storedSearches));
-    } else {
-      setRecentItems([]);
+    if (typeof window !== "undefined") {
+      try {
+        const recent = JSON.parse(localStorage.getItem("recent-modules") || "[]");
+        setRecentModules(recent.slice(0, 5));
+      } catch {
+        setRecentModules([]);
+      }
     }
   }, []);
 
@@ -192,8 +191,8 @@ export default function Home() {
           ),
         ].slice(0, 3);
 
-        localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
-        setRecentItems(updatedSearches);
+        localStorage.setItem("recent-modules", JSON.stringify(updatedSearches));
+        setRecentModules(updatedSearches);
 
         window.open(response[0].File, "_blank");
 
@@ -228,7 +227,7 @@ export default function Home() {
     return placeholders[placeholderIndex];
   };
   return (
-    <div className="bg-cover bg-center px-4 sm:px-6 lg:px-8 md:pt-40 flex flex-col items-center pt-32">
+    <div className="bg-cover bg-center px-4 sm:px-6 lg:px-8 md:pt-24 flex flex-col items-center pt-24">
       <form onSubmit={handleSearch} className="w-full max-w-xs sm:max-w-md lg:max-w-2xl mb-6">
         <div className="bg-black/40 p-3 sm:p-4 rounded-2xl flex items-center backdrop-blur-md">
           <input
@@ -320,49 +319,41 @@ export default function Home() {
         )}      </div>
       
         {
-        recentItems.length > 0 && (
-      
-      <div className="w-full max-w-xs sm:max-w-md lg:max-w-2xl text-white px-2 sm:px-0">
-        <p className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">RECENT SEARCHES</p>
-        {recentItems.length > 0 ? (
-          recentItems.map(
-            (
-              item: {
-                subject: string;
-                module_: string;
-                department: string;
-                link: string;
-              },
-              i: Key | null | undefined
-            ) => (
-              <Link
-                href={item.link}
-                target="_blank"
-                key={i}
-                className="bg-black/50 px-4 sm:px-6 py-3 sm:py-4 rounded-xl mb-3 sm:mb-4 flex justify-between items-center backdrop-blur-[.17rem] text-base sm:text-lg cursor-pointer hover:bg-black/70 transition-all duration-200 group"
+          recentModules.length > 0 && (
+            <div className="w-full max-w-2xl text-white">
+              <p className="text-base font-semibold mb-4">RECENT</p>
+              <div
+                className="flex flex-col gap-4 overflow-y-auto max-h-72 pr-2 no-scrollbar"
               >
-                <div className="flex flex-col min-w-0 flex-1">
-                  <span className="font-semibold text-white group-hover:text-blue-300 transition-colors capitalize truncate">
-                    {item.subject}
-                  </span>
-                  <span className="text-xs sm:text-sm text-white/70 mt-1">
-                    {item.module_}
-                  </span>
-                </div>
-                <span className="text-white/70 group-hover:text-white transition-colors transform group-hover:translate-x-1 ml-2 flex-shrink-0">
-                  &gt;
-                </span>
-              </Link>
-            )
-          )
-        ) : (
-          <div className="bg-black/30 px-4 sm:px-6 py-3 sm:py-4 rounded-xl mb-3 sm:mb-4 text-center text-white/70 text-sm sm:text-base">
-            {dept
-              ? `No recent items for ${dept}`
-              : "Select a department to see recent items"}
+                {recentModules.length === 0 ? (
+                  <div className="bg-black/50 px-6 py-4 rounded-xl flex justify-between items-center backdrop-blur-[.17rem] text-lg text-gray-400">
+                    No recent modules viewed.
+                  </div>
+                ) : (
+                  recentModules.slice(0, 5).map((mod) => (
+        <Link
+          key={mod.url}
+          href={mod.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-black/50 px-6 py-3 sm:py-3 rounded-xl flex justify-between items-center backdrop-blur-[.17rem] hover:bg-black/70 transition group"
+        >
+          <div>
+            <div className="text-md sm:text-lg font-bold capitalize">
+              {mod.subject} - {mod.module}
+            </div>
+            <div className="text-sm text-gray-300 mt-1 uppercase">
+              {mod.dept} | Sem {mod.sem}
+            </div>
           </div>
-        )}
-      </div>
+          <span className="ml-4 text-2xl text-gray-400 group-hover:text-white transition">
+            &gt;
+          </span>
+        </Link>
+      ))
+    )}
+  </div>
+</div>
         )}
       <Footer />
     </div>
