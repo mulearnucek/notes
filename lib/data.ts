@@ -12,7 +12,15 @@ export type Note = {
   Module: string;
   File: string;
   Title: string;
-}; 
+};
+
+export interface PlaylistItem {
+  id: string;
+  title: string;
+  playlistUrl: string;
+  module: string;
+  videosCount: number;
+}
 
 export function getData(url: string): Promise<string[][]> {
   return new Promise((resolve, reject) => {
@@ -41,6 +49,20 @@ export async function getModule(dept: string, sem: string, subject: string, modu
     return await getData(url);
   } catch (error) {
     console.error("Fetch failed:", error); 
+    return [];
+  }
+}
+
+export async function getVideoPlaylists(dept: string, sem: string, subject: string) {
+  const query = `SELECT * WHERE B = '${dept.toUpperCase()}' AND C = ${sem} AND D = '${subject.toUpperCase()}'`;
+
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=playlists&tq=` +
+    encodeURIComponent(query);
+
+  try {
+    return await getData(url);
+  } catch (error) {
+    console.error("Fetch failed:", error);
     return [];
   }
 }

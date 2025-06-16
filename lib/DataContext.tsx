@@ -6,7 +6,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { SHEET_ID } from './data';
 import Papa from 'papaparse';
 import { CSQL } from './csql';
-import Loading from '@/app/loading';
+import Loading from '@/app/loading_';
 import DepartmentSelectDialog from '@/components/DepartmentSelectDialog';
 
 type DataContextType = {

@@ -17,7 +17,17 @@ export const subjectMap = {
   maths: ["math", "maths", "mathematics"],
   physics: ["phys", "phiscs", "physics", "phy", "ph"],
   chemistry: ["chem", "chemsitry", "chemistry"],
-  biology: ["bio", "biology"],
   english: ["eng", "english", "englsh"],
   // Add more as needed
+};
+
+// Generate thumbnail URL from YouTube URL
+export const generateThumbnailUrl = (url: string, prefix: string): string => {
+  const videoId  = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/);
+
+  if (videoId  && videoId[1]) {
+    return `https://img.youtube.com/vi/${videoId[1]}/${prefix}.jpg`;
+  }
+  // Fallback
+  return "https://via.placeholder.com/480x360/1a1a1a/ffffff?text=YouTube+Playlist";
 };
