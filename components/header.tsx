@@ -14,10 +14,29 @@ export default function Header() {
   const router = useRouter();
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
-  const handleSelect = (dept: string) => {
-    setDept(dept);
+
+  const handleSelect = (newDept: string) => {
+    setDept(newDept);
     setIsOpen(false);
-    router.push(`/${dept.toLowerCase()}`);
+
+    // Split the current path
+    const parts = pathname.split("/").filter(Boolean); // removes empty strings
+
+    // If path is just /, go to /[newDept]
+    if (parts.length === 0) {
+      router.push(`/${newDept.toLowerCase()}`);
+      return;
+    }
+
+    // If path starts with a department, replace it
+    if (departments.map(d => d.toLowerCase()).includes(parts[0])) {
+      parts[0] = newDept.toLowerCase();
+      router.push("/" + parts.join("/"));
+      return;
+    }
+
+    // Fallback: just go to /[newDept]
+    router.push(`/${newDept.toLowerCase()}`);
   };
 
   return (
