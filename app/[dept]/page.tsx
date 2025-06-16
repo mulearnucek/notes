@@ -19,7 +19,7 @@ export default async function Dept({
   return (
     <div className="flex flex-col items-center w-full max-w-6xl px-2 sm:px-0 justify-center">
       <div className="flex flex-col items-center w-full max-w-4xl">
-        <div className="w-full max-w-4xl mb-6 bg-black/60 rounded-xl p-5 shadow-md border-gray-700 border">
+        <div className="w-full max-w-4xl mb-6 bg-black/60 rounded-xl p-5 shadow-md border-gray-700 border mt-10 sm:mt-0">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <div className="text-xl font-bold break-words">

@@ -46,10 +46,10 @@ export default function Header() {
       </Link>
 
       <div className="relative items-center flex-col">
-        <div className="hidden md:block text-sm">Department</div>
+        <div className="hidden md:block text-md font-bold">Department</div>
         <button
           onClick={toggleDropdown}
-          className="cursor-pointer flex justify-between items-center focus:outline-none"
+          className="cursor-pointer flex justify-between items-center focus:outline-none mr-3 sm:ml-7"
         >
           <span className="text-base sm:text-lg font-medium mr-1 sm:mr-[3px]">{dept == '' ? "Select" : dept}</span>
           <svg
