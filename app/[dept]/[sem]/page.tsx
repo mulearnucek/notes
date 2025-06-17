@@ -1,8 +1,9 @@
 "use client";
-import { getSubjects } from "@/lib/data";
+
+import { Note } from "@/lib/data";
+import { useDataContext } from "@/lib/DataContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import * as React from "react";
 
 export default function Page({
   params,
@@ -16,11 +17,19 @@ export default function Page({
   } | null>(null);
   const { db } = useDataContext();
 
-  const semNumber = sem;
-  const deptLower = dept.toLowerCase();
+  useEffect(() => {
+    const resolveParams = async () => {
+      const resolved = await params;
+      setResolvedParams(resolved);
+    };
+    resolveParams();
+  }, [params]);
 
   useEffect(() => {
+    if (!resolvedParams) return;
+
     const fetchSubjects = async () => {
+      try {
         setSubjects(
           db?.query({
             where: {
