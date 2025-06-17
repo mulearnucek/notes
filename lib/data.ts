@@ -42,16 +42,16 @@ export function getData(url: string): Promise<string[][]> {
   });
 }
 
-export async function getModule(dept: string, sem: string, subject: string, module: string) {  
+export async function getModule(dept: string, sem: string, subject: string, module: string) {
   const query = `SELECT G WHERE C = '${dept.toUpperCase()}' AND D = ${sem} AND E = '${subject.toUpperCase()}' AND F = ${module}`;
-  
+
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=notes&tq=` +
     encodeURIComponent(query);
-  
+
   try {
     return await getData(url);
   } catch (error) {
-    console.error("Fetch failed:", error); 
+    console.error("Fetch failed:", error);
     return [];
   }
 }
@@ -68,4 +68,22 @@ export async function getVideoPlaylists(dept: string, sem: string, subject: stri
     console.error("Fetch failed:", error);
     return [];
   }
+}
+
+export function getSubjects(dept: string, sem: string) {
+  const url =
+    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=notes&tq=` +
+    encodeURIComponent(
+      `SELECT E, COUNT(E) WHERE C = '${dept.toUpperCase()}' AND D = ${sem} GROUP BY E ORDER BY E`
+    );
+
+  return getData(url)
+    .then(data => {
+      if (data.length === 0) return [];
+      return data.flatMap(row => row[0]);
+    })
+    .catch(error => {
+      console.error("Fetch failed:", error);
+      return [];
+    });
 }
