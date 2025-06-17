@@ -118,7 +118,7 @@ export default function Page({
             <div className="text-md font-medium">
               Semester: <span className="font-bold">{sem}</span>
             </div>
-            <div className="text-md font-medium">
+            <div className="text-md font-medium" >
               Scheme:{" "}
               <span className="font-bold">
                 {(modules[0] && modules[0].Scheme) || "N/A"}
