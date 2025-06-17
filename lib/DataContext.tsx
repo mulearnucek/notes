@@ -75,7 +75,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                 onSelect={handleDepartmentSelect}
                 db={db}
             />
-            {db? children : <Loading msg="Getting your notes..." />}
+            {db && vldb ? children : <Loading msg="Getting your notes..." />}
         </DataContext.Provider>
     );
 };
