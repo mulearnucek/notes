@@ -18,6 +18,11 @@ export const subjectMap = {
   physics: ["phys", "phiscs", "physics", "phy", "ph"],
   chemistry: ["chem", "chemsitry", "chemistry"],
   english: ["eng", "english", "englsh"],
+  "ENGINEERING MECHANICS": ["mechanics","engineering mechanics","eng mechanics"],
+  "BASICS OF MECHANICAL ENGINEERING": ["mech","mechanical","bme"],
+  "BASICS OF CIVIL ENGINEERING": ["civil","civil engineering","bce"],
+  "ENGINEERING GRAPHICS": ["graphics","graphi","eng graphics"],
+  "PROFESSIONAL COMMUNICATION": ["pc","professional","communication","proff","comm"],
   // Add more as needed
 };
 
