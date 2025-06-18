@@ -4,6 +4,7 @@ import { useDataContext } from "@/lib/DataContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { PlaylistCard } from "@/components/PlaylistCard";
+import Footer from "@/components/footer";
 
 export default function Page({
   params,
@@ -206,8 +207,8 @@ export default function Page({
                 </Link>
               ))
             ) : (
-              <div className="text-center mt-10 text-white col-span-full">
-                No modules found for {subject} in semester {sem}.
+              <div className="text-center text-white col-span-full">
+                No modules found for {subject.toUpperCase()} in Semester {sem}.
               </div>
             )}
           </div>
@@ -231,6 +232,7 @@ export default function Page({
             </div>
           </div>{" "}
         </div>}
+        <Footer />
     </div>
   );
 }
