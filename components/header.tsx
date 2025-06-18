@@ -75,7 +75,10 @@ export default function Header() {
               <div
                 key={d}
                 onClick={() => handleSelect(d)}
-                className="px-3 sm:px-4 py-2 hover:bg-white/10 cursor-pointer rounded-md text-sm sm:text-base"
+                className={`px-3 sm:px-4 py-2 cursor-pointer text-sm sm:text-base
+                  ${dept === d
+                    ? "bg-white/20 text-white"
+                    : "hover:bg-white/10"}`}
               >
                 {d}
               </div>

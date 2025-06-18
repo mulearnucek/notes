@@ -8,6 +8,13 @@ import Image from "next/image";
 import GithubLogo from "@/public/github-logo.svg";
 import { AvatarCard } from "@/components/avatar-card";
 
+const NOTE_CONTRIBUTORS = [
+  "Abhi",
+  "Jane Doe",
+  "Another Name",
+  // Add more names as needed
+];
+
 function Page() {
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -32,9 +39,9 @@ function Page() {
   ) : (
     <div className="flex flex-col h-full">
       <Header />
-      <div className="mt-40 flex-1 justify-center mb-8 flex-col">
-        <div className="text-2xl flex items-center justify-center mb-5">
-          Contributors
+      <div className="mt-20 sm:mt-30 flex-1 justify-center mb-8 flex-col">
+        <div className="text-2xl flex items-center justify-center mb-5 font-bold">
+          CONTRIBUTORS
         </div>
         <div className="items-center flex-col sm:flex-row w-full justify-evenly flex md:gap-x-4 gap-y-6 mb-10">
           {data.map(
@@ -47,20 +54,35 @@ function Page() {
                 key={contr.login}
                 className="rounded-[24px] backdrop-blur flex flex-col border border-slate-600 p-5"
               >
-                <AvatarCard url={contr.avatar_url} className="w-44" />
+                <AvatarCard url={contr.avatar_url} className="w-53 sm:w-44" />
                 <a
                   href={contr.html_url}
                   target="_blank"
                   className="transition-all hover:scale-105 scale-100"
                 >
                   <div className="flex justify-center gap-2 items-center mt-5 rounded-lg p-2 border border-white/30">
-                    <Image src={GithubLogo} height={30} width={30} alt="Github Icon"/>
+                    <Image src={GithubLogo} height={30} width={30} alt="Github Icon" />
                     <span className="text-md">@{contr.login}</span>
                   </div>
                 </a>
               </div>
             )
           )}
+        </div>
+
+        {/* Note Contributors Section */}
+        <div className="text-xl flex items-center justify-center mb-5 font-bold mt-12">
+          NOTE CONTRIBUTORS
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 justify-center w-full mb-10">
+          {NOTE_CONTRIBUTORS.map((name) => (
+            <div
+              key={name}
+              className="bg-black/40 text-white rounded-xl px-3 py-2 text-sm sm:text-base font-semibold shadow border border-slate-600 text-center"
+            >
+              {name}
+            </div>
+          ))}
         </div>
       </div>
       <Footer />
@@ -69,4 +91,3 @@ function Page() {
 }
 
 export default Page;
-
