@@ -54,8 +54,6 @@ export default function Page({
       try {
         const response = vldb?.query({
           where: {
-            Department: dept.toUpperCase(),
-            Semester: paramsData.sem,
             Subject: subject.toUpperCase(),
           },
           orderBy: "Module",
