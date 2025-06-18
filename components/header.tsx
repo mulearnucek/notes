@@ -19,8 +19,11 @@ export default function Header() {
     setDept(newDept);
     setIsOpen(false);
 
+    // If on home page, don't navigate
+    if (pathname === "/") return;
+
     // Split the current path
-    const parts = pathname.split("/").filter(Boolean); // removes empty strings
+    const parts = pathname.split("/").filter(Boolean);
 
     // If path is just /, go to /[newDept]
     if (parts.length === 0) {

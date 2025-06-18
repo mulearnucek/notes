@@ -4,6 +4,7 @@ import { Note } from "@/lib/data";
 import { useDataContext } from "@/lib/DataContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Footer from "@/components/footer";
 
 export default function Page({
   params,
@@ -84,8 +85,8 @@ export default function Page({
   }
 
   return (
-    <div className="text-white flex flex-col justify-center items-center p-6">
-      <div className="w-full max-w-4xl mb-6 bg-black/60 rounded-xl p-5 shadow-md border-gray-700 border">
+    <div className="text-white flex flex-col justify-center items-center">
+      <div className="w-full max-w-4xl mb-6 bg-black/60 rounded-xl p-5 shadow-md border-gray-700 border mt-8 sm:mt-0">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="text-xl font-bold break-words">SELECT SUBJECT</div>
@@ -130,7 +131,7 @@ export default function Page({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8 w-full max-w-4xl items-stretch">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-8 w-full max-w-4xl items-stretch">
         {subjects.map((sub, index) => (
           <Link
             key={index}
@@ -138,7 +139,7 @@ export default function Page({
               .toLowerCase()
               .replace(/\s+/g, "-")}`}
             className="group relative flex flex-col items-center justify-center bg-black/60 border border-white/20 rounded-xl shadow-md px-4 py-3 sm:px-6 sm:py-4 transition-all duration-300 backdrop-blur-md cursor-pointer hover:scale-105 hover:shadow-2xl overflow-hidden h-full min-h-[72px]"
-            style={{ minWidth: "260px", maxWidth: "260px", margin: "0 auto" }}
+            style={{ minWidth: "290px", maxWidth: "290px", margin: "0 auto" }}
           >
             <span className="z-10 text-white text-base sm:text-lg font-semibold capitalize text-center break-words">
               {sub.Subject.toLowerCase()}
@@ -147,6 +148,7 @@ export default function Page({
           </Link>
         ))}
       </div>
+      <Footer />
     </div>
   );
 }
