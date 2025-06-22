@@ -281,14 +281,22 @@ export default function Home() {
               <Link
                 key={item}
                 href={dept ? dept.toLowerCase() : "/"}
-                className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center text-center  hover:scale-105"
+                className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center text-center hover:scale-105"
+              >
+                {item}
+              </Link>
+            ) : item === "Syllabus" ? (
+              <Link
+                key={item}
+                href={dept ? `${dept.toLowerCase()}/syllabus` : "/"}
+                className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center text-center hover:scale-105"
               >
                 {item}
               </Link>
             ) : (
               <button
                 key={item}
-                className="bg-black/30 hover:bg-black/50 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full text-center  hover:scale-105"
+                className="bg-black/30 hover:bg-black/50 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full text-center hover:scale-105"
               >
                 {item}
               </button>
