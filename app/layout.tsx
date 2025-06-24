@@ -10,11 +10,11 @@ const ogImageUrl = "https://notes.uck.ac.in/og-image.jpg";
 export const metadata: Metadata = {
   title: "Notes UCEK",
   description: "An initiative by Mulearn UCEK.",
-  metadataBase: new URL("https://notes.uck.ac.in"),
+  metadataBase: new URL("https://notes.uck.ac.in/"),
   openGraph: {
     title: "Notes UCEK",
     description: "An initiative by Mulearn UCEK.",
-    url: "https://notes.uck.ac.in",
+    url: "https://notes.uck.ac.in/",
     siteName: "Notes UCEK",
     images: [
       {
