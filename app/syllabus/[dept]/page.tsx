@@ -35,7 +35,7 @@ export default function DepartmentPage() {
         '5': 'https://drive.google.com/open?id=1luMrf5w34FWw19w7zKOfnEuzbAVBU20o',
         '6': 'https://drive.google.com/open?id=1gu3laCU3ewFh5J7OOj0VwK7l2HvYJ8_U',
         '7': 'https://drive.google.com/open?id=1Iwp8UPnMSLqAlZzs19rQOQJMA8xqYO-5',
-        '8': 'https://drive.google.com/open?id=1Iwp8UPnMSLqAlZzs19rQOQJMA8xqYO-5',
+        '8': 'https://drive.google.com/open?id=1JuE9sDtUxQv3R_BwrepzQqmBOCo_jO9U',
       }
     };
 
