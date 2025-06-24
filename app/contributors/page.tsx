@@ -27,7 +27,7 @@ function Page() {
   return <div className="flex flex-col">
     <Header />
     {data.length == 0 ? (<div className="flex flex-col">
-      <div className="flex flex-col items-center justify-center min-h-screen text-white">
+      <div className="flex flex-col items-center justify-center text-white">
         <div className="text-2xl mb-4">Loading Contributors...</div>
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
       </div>
