@@ -24,7 +24,7 @@ function Page() {
       });
   }, []);
 
-  return <div className="flex flex-col h-[100dvh]">
+  return <div className="flex flex-col h-full">
     <Header />
     {data.length == 0 ? (<div className="flex flex-col h-[100dvh]">
       <div className="flex flex-col items-center justify-center min-h-screen text-white">
@@ -43,10 +43,10 @@ function Page() {
           {contributors.filter(x=> x[1] == "Note").map((contributor,i) => (
             <div
             key={"note-contributor-" + i}
-              className="bg-black/40 text-white rounded-xl px-3 py-2 text-sm sm:text-base font-semibold shadow border border-slate-600 text-center"
+              className="bg-black/40 text-white backdrop-blur rounded-xl px-3 py-2 text-sm sm:text-base font-semibold shadow border border-slate-600 text-center"
             >
               {contributor[0]}
-              <span className="text-xs text-gray-400 block">
+              <span className="text-xs text-gray-300 block">
                 {contributor[2] ? `${contributor[2]}` : ""}
               </span>
             </div>
