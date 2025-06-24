@@ -87,3 +87,14 @@ export function getSubjects(dept: string, sem: string) {
       return [];
     });
 }
+
+export function getContributors(){
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=contributors`;
+
+  try {
+    return getData(url);
+  } catch (error) {
+    console.error("Fetch failed:", error);
+    return [];
+  }
+}
