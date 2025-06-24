@@ -31,6 +31,13 @@ export default function Header() {
       return;
     }
 
+    // Check if current path is a syllabus route
+    if (parts[0] === "syllabus") {
+      // If on syllabus route, redirect to /syllabus/[newDept]
+      router.push(`/syllabus/${newDept.toLowerCase()}`);
+      return;
+    }
+
     // If path starts with a department, replace it
     if (departments.map(d => d.toLowerCase()).includes(parts[0])) {
       parts[0] = newDept.toLowerCase();
