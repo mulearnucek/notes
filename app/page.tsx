@@ -9,6 +9,33 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { useDataContext } from "@/lib/DataContext";
 import { useRouter } from "next/navigation";
 
+
+export const metadata = {
+  title: "Notes UCEK",
+  description: "An initiative by Mulearn UCEK.",
+  openGraph: {
+    title: "Notes UCEK",
+    description: "An initiative by Mulearn UCEK.",
+    url: "https://notes.uck.ac.in/",
+    siteName: "Notes UCEK",
+    images: [
+      {
+        url: "https://notes.uck.ac.in/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Notes UCEK Preview",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Notes UCEK",
+    description: "An initiative by Mulearn UCEK.",
+    images: ["https://notes.uck.ac.in/og-image.jpg"],
+  },
+};
+
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [errorMsg, setErrorMsg] = useState<string>();
