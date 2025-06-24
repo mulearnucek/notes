@@ -83,7 +83,7 @@ export default function Home() {
           return standard;
         }
       }
-      return word; // fallback to original if no match
+      return word;
     };
 
     for (const part of parts) {
@@ -98,7 +98,6 @@ export default function Home() {
       }
     }
 
-    // Condition: If only subject is provided
     if (!sem && !module_ && subject !== undefined) {
       const r1 = db?.query({
         where: {
@@ -122,7 +121,6 @@ export default function Home() {
       }
     }
 
-    // Condition: If only semester is provided
     if (sem && !subject && !module_) {
       const result = db?.query({
         where: {
@@ -138,7 +136,6 @@ export default function Home() {
       }
     }
 
-    // Condition: If semester and subject are provided
     if (sem && subject && !module_) {
       const r1 = db?.query({
         where: {
@@ -172,21 +169,6 @@ export default function Home() {
       throw new Error("Invalid input format");
     }
 
-    // --- Normalize module_ to match your data format ---
-    // If your data uses "1", leave as is.
-    // If your data uses "01", uncomment the next line:
-    // if (module_.length === 1) module_ = "0" + module_;
-    // If your data uses "Module 1", uncomment the next line:
-    // module_ = `Module ${module_}`;
-
-    // Debug: log the query
-    // console.log({
-    //   Department: dept.toUpperCase(),
-    //   Semester: sem,
-    //   Subject: subject.toUpperCase(),
-    //   Module: module_,
-    // });
-
     const response = db?.query({
       where: {
         Department: dept.toUpperCase(),
@@ -207,7 +189,6 @@ export default function Home() {
 
     setErrorMsg("");
 
-    // --- Add to recent modules ---
     const newRecent = {
       module: response[0].Title,
       subject,
@@ -224,7 +205,6 @@ export default function Home() {
     if (recentArr.length > 5) recentArr = recentArr.slice(0, 5);
     localStorage.setItem("recent-modules", JSON.stringify(recentArr));
     setRecentModules(recentArr);
-    // --- End add to recent modules ---
 
     window.open(response[0].File, "_blank");
   }
@@ -256,7 +236,7 @@ export default function Home() {
   };
 
   return (
-    <div className=" flex flex-col bg-cover bg-center px-4 sm:px-6 lg:px-8">
+    <div className="flex flex-col bg-cover bg-center px-4 sm:px-6 lg:px-8">
       <main className="flex-1 flex flex-col items-center pt-16 sm:pt-20 w-full">
         <form onSubmit={handleSearch} className="w-full max-w-xs sm:max-w-md lg:max-w-2xl mb-4">
           <div className="bg-black/40 p-3 sm:p-4 rounded-2xl flex items-center backdrop-blur-md">
@@ -308,14 +288,22 @@ export default function Home() {
               <Link
                 key={item}
                 href={dept ? dept.toLowerCase() : "/"}
-                className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center text-center  hover:scale-105"
+                className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center text-center hover:scale-105"
+              >
+                {item}
+              </Link>
+            ) : item === "Syllabus" ? (
+              <Link
+                key={item}
+                href={dept ? `/syllabus/${dept.toLowerCase()}` : "/"}
+                className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center text-center hover:scale-105"
               >
                 {item}
               </Link>
             ) : (
               <button
                 key={item}
-                className="bg-black/30 hover:bg-black/50 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full text-center  hover:scale-105"
+                className="bg-black/30 hover:bg-black/50 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full text-center hover:scale-105"
               >
                 {item}
               </button>
