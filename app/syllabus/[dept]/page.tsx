@@ -52,7 +52,7 @@ export default function DepartmentPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className=" flex flex-col">
       <div className="flex-1 text-white flex flex-col justify-center items-center py-8">
         <div className="w-full max-w-6xl mb-6 bg-black/60 rounded-xl p-5 shadow-md border-gray-700 border mt-8 sm:mt-0">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -122,8 +122,6 @@ export default function DepartmentPage() {
           ))}
         </div>
       </div>
-      
-      <Footer />
     </div>
   );
 }

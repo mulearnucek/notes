@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "../components/header";
 import { DataProvider } from "@/lib/DataContext";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "Notes UCEK",
@@ -25,6 +26,7 @@ export default function RootLayout({
             </div>
             {children}
           </div>
+          <Footer />
         </DataProvider>
         <GoogleAnalytics gaId="G-4VMW6ZQRS1" />
       </body>
