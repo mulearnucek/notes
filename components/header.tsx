@@ -14,13 +14,25 @@ export default function Header() {
   const router = useRouter();
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
-
   const handleSelect = (newDept: string) => {
     setDept(newDept);
     setIsOpen(false);
 
     // If on home page, don't navigate
     if (pathname === "/") return;
+
+    // If on a question-paper route, replace the department part
+    if (pathname.startsWith("/question-paper")) {
+      const parts = pathname.split("/").filter(Boolean); // ["question-paper", "cse", ...]
+      if (parts.length >= 2) {
+        parts[1] = newDept.toLowerCase(); // Replace department
+        router.push("/" + parts.join("/"));
+      } else {
+        // If only /question-paper, go to /question-paper/[newDept]
+        router.push(`/question-paper/${newDept.toLowerCase()}`);
+      }
+      return;
+    }
 
     // Split the current path
     const parts = pathname.split("/").filter(Boolean);
@@ -48,7 +60,6 @@ export default function Header() {
     // Fallback: just go to /[newDept]
     router.push(`/${newDept.toLowerCase()}`);
   };
-
   return (
     <div className="w-full px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center text-white absolute top-0 left-0 z-10">
       <Link href={'/'}>

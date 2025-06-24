@@ -98,3 +98,18 @@ export function getContributors(){
     return [];
   }
 }
+
+export async function getQuestionPapers(dept: string, sem: string, subject: string) {
+  // C = Department, D = Semester, E = Subject
+  const query = `SELECT * WHERE C = '${dept.toUpperCase()}' AND D = ${sem} AND E = '${subject.toUpperCase()}' ORDER BY F DESC`; // F = Date
+
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=pyq&tq=` +
+    encodeURIComponent(query);
+
+  try {
+    return await getData(url);
+  } catch (error) {
+    console.error("Fetch failed:", error);
+    return [];
+  }
+}
