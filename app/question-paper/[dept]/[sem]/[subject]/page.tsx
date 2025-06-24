@@ -24,22 +24,9 @@ export default function QuestionPaperList() {
   const { dept, sem, subject } = params as { dept?: string; sem?: string; subject?: string };
   const [qpapers, setQpapers] = useState<any[]>([]);
 
-  // Guard: Wait for params to be available
-  if (!dept || !sem || !subject) {
-    return (
-      <div className="text-center mt-10 text-white flex flex-col items-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white mb-4"></div>
-        Loading...
-      </div>
-    );
-  }
-
-  // For display
-  const subjectVariants = getAllSubjectVariants(subject as string, pyq);
-  const subjectParam = subjectVariants[0]?.toUpperCase() || subject.replace(/-/g, " ").toUpperCase();
-
+  // All hooks must be called before any return!
   useEffect(() => {
-    if (!pyq) return;
+    if (!pyq || !dept || !sem || !subject) return;
     const subjectVariants = getAllSubjectVariants(subject as string, pyq);
     let allResults: any[] = [];
     subjectVariants.forEach((variant) => {
@@ -57,6 +44,19 @@ export default function QuestionPaperList() {
     });
     setQpapers(allResults);
   }, [pyq, dept, sem, subject]);
+
+  if (!dept || !sem || !subject) {
+    return (
+      <div className="text-center mt-10 text-white flex flex-col items-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white mb-4"></div>
+        Loading...
+      </div>
+    );
+  }
+
+  // For display
+  const subjectVariants = getAllSubjectVariants(subject as string, pyq);
+  const subjectParam = subjectVariants[0]?.toUpperCase() || subject.replace(/-/g, " ").toUpperCase();
 
   const deptLower = (dept as string).toLowerCase();
 
