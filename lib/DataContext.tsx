@@ -12,6 +12,7 @@ import DepartmentSelectDialog from '@/components/DepartmentSelectDialog';
 type DataContextType = {
     db: CSQL | undefined;
     vldb: CSQL | undefined;
+    pyq: CSQL | undefined; // <-- add this
     dept: string;
     setDept: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -21,6 +22,7 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 export const DataProvider = ({ children }: { children: ReactNode }) => {
     const [db, setDb] = useState<CSQL>();
     const [vldb, setVldb] = useState<CSQL>();
+    const [pyq, setPyq] = useState<CSQL>(); // <-- add this
     const [dept, setDept] = useState<string>('');
     const [showDeptDialog, setShowDeptDialog] = useState<boolean>(false);    useEffect(() => {
         Papa.parse(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=notes`, {
@@ -58,6 +60,21 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
                 console.error('Error parsing VLDB CSV:', error);
             }
         });
+
+        Papa.parse(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=pyq`, {
+            download: true,
+            header: true,
+            complete: (results) => {
+                if (results.errors.length > 0) {
+                    console.error('Error loading PYQ:', results.errors);
+                } else {
+                    setPyq(new CSQL(results.data));
+                }
+            },
+            error: (error) => {
+                console.error('Error parsing PYQ CSV:', error);
+            }
+        });
     }, []);    useEffect(() => {
         if (dept) {
             localStorage.setItem('dept', dept);
@@ -69,13 +86,13 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         setShowDeptDialog(false);
     };
         return (
-        <DataContext.Provider value={{ db, vldb, dept, setDept }}>
+        <DataContext.Provider value={{ db, vldb, pyq, dept, setDept }}>
             <DepartmentSelectDialog 
                 isOpen={showDeptDialog} 
                 onSelect={handleDepartmentSelect}
                 db={db}
             />
-            {db && vldb ? children : <Loading msg="Getting your notes..." />}
+            {db && vldb && pyq ? children : <Loading msg="Getting your notes..." />}
         </DataContext.Provider>
     );
 };

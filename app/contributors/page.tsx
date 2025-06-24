@@ -24,19 +24,17 @@ function Page() {
       });
   }, []);
 
-  return data.length == 0 ? (
-    <div className="flex flex-col h-full">
-      <Header />
-      <div className="flex flex-col items-center justify-center min-h-screen text-white">
+  return <div className="flex flex-col ">
+    <Header />
+    {data.length == 0 ? (<div className="flex flex-col ">
+      <div className="flex flex-col items-center justify-center  text-white">
         <div className="text-2xl mb-4">Loading Contributors...</div>
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
       </div>
       <Footer />
     </div>
   ) : (
-    <div className="flex flex-col h-full">
-      <Header />
-      <div className="mt-20 sm:mt-30 flex-1 justify-center mb-8 flex-col">
+      <div className="mt-20 sm:mt-0 flex-1 justify-center flex-col">
         {/* Note Contributors Section */}
         <div className="text-xl flex items-center justify-center mb-5 font-bold mt-12">
           NOTE CONTRIBUTORS
@@ -44,7 +42,7 @@ function Page() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 justify-center w-full mb-10">
           {contributors.filter(x=> x[1] == "Note").map((contributor,i) => (
             <div
-              key={"note-contributor-" + i}
+            key={"note-contributor-" + i}
               className="bg-black/40 text-white rounded-xl px-3 py-2 text-sm sm:text-base font-semibold shadow border border-slate-600 text-center"
             >
               {contributor[0]}
@@ -66,8 +64,8 @@ function Page() {
               html_url: string;
             }) => (
               <div
-                key={contr.login}
-                className="rounded-[24px] backdrop-blur flex flex-col border border-slate-600 p-5"
+              key={contr.login}
+              className="rounded-[24px] backdrop-blur flex flex-col border border-slate-600 p-5"
               >
                 <AvatarCard url={contr.avatar_url} className="w-53 sm:w-44" />
                 <a
@@ -84,10 +82,10 @@ function Page() {
             )
           )}
         </div>
-      </div>
       <Footer />
     </div>
-  );
+  )}
+</div>
 }
 
 export default Page;

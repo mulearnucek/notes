@@ -245,8 +245,8 @@ export default function Home() {
             {!loading ? (
               <button
                 className={`px-2 sm:px-3 ${!dept
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer"
+                  ? "opacity-50 cursor-not-allowed"
+                  : "cursor-pointer"
                   } transition-all duration-200`}
                 type="submit"
                 disabled={!dept}
@@ -281,14 +281,30 @@ export default function Home() {
               <Link
                 key={item}
                 href={dept ? dept.toLowerCase() : "/"}
-                className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center text-center  hover:scale-105"
+                className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center text-center hover:scale-105"
               >
                 {item}
               </Link>
+            ) : item === "Question Paper" ? (
+              <button
+                key={item}
+                onClick={() => {
+                  if (dept) {
+                    router.push(`/question-paper/${dept.toLowerCase()}`);
+                  } else {
+                    setErrorMsg("Please select a department first.");
+                  }
+                }}
+                className={`bg-black/30 hover:bg-black/50 transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full text-center hover:scale-105 ${!dept ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                  }`}
+                disabled={!dept}
+              >
+                {item}
+              </button>
             ) : (
               <button
                 key={item}
-                className="bg-black/30 hover:bg-black/50 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full text-center  hover:scale-105"
+                className="bg-black/30 hover:bg-black/50 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full text-center hover:scale-105"
               >
                 {item}
               </button>
