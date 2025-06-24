@@ -25,6 +25,7 @@ function Page() {
   }, []);
 
   return <div className="flex flex-col">
+  return <div className="flex flex-col">
     <Header />
     {data.length == 0 ? (<div className="flex flex-col">
       <div className="flex flex-col items-center justify-center text-white">
@@ -34,6 +35,7 @@ function Page() {
       <Footer />
     </div>
   ) : (
+      <div className="mt-20 sm:mt-0 flex-1 justify-center mb-8 flex-col">
       <div className="mt-20 sm:mt-0 flex-1 justify-center mb-8 flex-col">
         {/* Note Contributors Section */}
         <div className="text-xl flex items-center justify-center mb-5 font-bold mt-12">
