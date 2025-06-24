@@ -1,13 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import Footer from '@/components/footer'; // Add this import
+import Footer from '@/components/footer';
 
 export default function SyllabusPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex-1 text-white flex flex-col justify-center items-center py-8">
-        <div className="w-full max-w-4xl mb-6 bg-black/60 rounded-xl p-5 shadow-md border-gray-700 border mt-8 sm:mt-0">
+        <div className="w-full max-w-6xl mb-6 bg-black/60 rounded-xl p-5 shadow-md border-gray-700 border mt-8 sm:mt-0">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <div className="text-xl font-bold break-words">SYLLABUS</div>
@@ -37,7 +37,7 @@ export default function SyllabusPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-8 w-full max-w-4xl items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-8 w-full max-w-6xl items-stretch">
           {['CSE', 'ECE', 'IT'].map((dept) => (
             <Link
               key={dept}
@@ -54,7 +54,7 @@ export default function SyllabusPage() {
         </div>
       </div>
       
-      <Footer /> {/* Add this line */}
+      <Footer />
     </div>
   );
 }

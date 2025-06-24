@@ -54,7 +54,7 @@ export default function DepartmentPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex-1 text-white flex flex-col justify-center items-center py-8">
-        <div className="w-full max-w-4xl mb-6 bg-black/60 rounded-xl p-5 shadow-md border-gray-700 border mt-8 sm:mt-0">
+        <div className="w-full max-w-6xl mb-6 bg-black/60 rounded-xl p-5 shadow-md border-gray-700 border mt-8 sm:mt-0">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <div className="text-xl font-bold break-words">SYLLABUS</div>
@@ -95,7 +95,7 @@ export default function DepartmentPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-8 w-full max-w-4xl items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-8 w-full max-w-6xl items-stretch">
           <button
             onClick={() => handleRedirect('1-2')}
             className="group relative flex flex-col items-center justify-center bg-black/60 border border-white/20 rounded-xl shadow-md px-4 py-3 sm:px-6 sm:py-4 transition-all duration-300 backdrop-blur-md cursor-pointer hover:scale-105 hover:shadow-2xl overflow-hidden h-full min-h-[72px]"
@@ -123,7 +123,7 @@ export default function DepartmentPage() {
         </div>
       </div>
       
-      <Footer /> {/* Add this line */}
+      <Footer />
     </div>
   );
 }
