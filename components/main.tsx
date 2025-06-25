@@ -9,7 +9,6 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { useDataContext } from "@/lib/DataContext";
 import { useRouter } from "next/navigation";
 
-
 export default function Main() {
   const [searchQuery, setSearchQuery] = useState("");
   const [errorMsg, setErrorMsg] = useState<string>();
@@ -226,8 +225,8 @@ export default function Main() {
             {!loading ? (
               <button
                 className={`px-2 sm:px-3 ${!dept
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer"
+                  ? "opacity-50 cursor-not-allowed"
+                  : "cursor-pointer"
                   } transition-all duration-200`}
                 type="submit"
                 disabled={!dept}
@@ -257,32 +256,25 @@ export default function Main() {
         </form>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 w-full max-w-xs sm:max-w-md lg:max-w-2xl mb-4 sm:mb-4">
-          {["Question Paper", "Notes", "Syllabus"].map((item) =>
-            item === "Notes" ? (
-              <Link
-                key={item}
-                href={dept ? dept.toLowerCase() : "/"}
-                className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center text-center hover:scale-105"
-              >
-                {item}
-              </Link>
-            ) : item === "Syllabus" ? (
-              <Link
-                key={item}
-                href={dept ? `/syllabus/${dept.toLowerCase()}` : "/"}
-                className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center text-center hover:scale-105"
-              >
-                {item}
-              </Link>
-            ) : (
-              <button
-                key={item}
-                className="bg-black/30 hover:bg-black/50 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full text-center hover:scale-105"
-              >
-                {item}
-              </button>
-            )
-          )}
+          <button
+            onClick={() => dept ? router.push(`/question-paper/${dept.toLowerCase()}`) : setErrorMsg("Please select a department first.")}
+            className={`bg-black/30 hover:bg-black/50 transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full text-center hover:scale-105 ${!dept ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+            disabled={!dept}
+          >
+            Question Paper
+          </button>
+          <Link
+            href={dept ? `/${dept.toLowerCase()}` : "/"}
+            className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center text-center hover:scale-105"
+          >
+            Notes
+          </Link>
+          <Link
+            href={dept ? `/syllabus/${dept.toLowerCase()}` : "/"}
+            className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center text-center hover:scale-105"
+          >
+            Syllabus
+          </Link>
         </div>
 
         {recentModules.length > 0 && (

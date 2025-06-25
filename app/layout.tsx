@@ -63,7 +63,7 @@ export default function RootLayout({
           <Header />
           <div className="min-h-screen text-white flex flex-col justify-center items-center p-4 sm:p-6">
             <div className="absolute inset-0 -z-10">
-              <div className="w-full h-full bg-[url('https://random-image-pepebigotes.vercel.app/api/random-image')] bg-no-repeat bg-cover bg-center sepia-50 brightness-75" />
+              <div className="w-full h-full bg-[url('https://random-image-pepebigotes.vercel.app/api/random-image')] bg-no-repeat bg-cover bg-center brightness-50 "></div>
             </div>
             {children}
           </div>
