@@ -96,7 +96,7 @@ export default function QuestionPaperList() {
               </li>
               <li>
                 <Link
-                  href={`/question-paper/${deptLower}`}
+                  href={`/${deptLower}/pyq`}
                   className="hover:underline text-gray-300"
                 >
                   {deptLower.toUpperCase()}
@@ -107,7 +107,7 @@ export default function QuestionPaperList() {
               </li>
               <li>
                 <Link
-                  href={`/question-paper/${deptLower}/${sem}`}
+                  href={`/${deptLower}/pyq/${sem}`}
                   className="hover:underline text-gray-300"
                 >
                   Semester {sem}
@@ -138,10 +138,9 @@ export default function QuestionPaperList() {
                   className="text-center bg-black/50 hover:bg-black/60 px-4 py-4 rounded-2xl text-base sm:text-lg font-semibold shadow-md transition-all duration-200 backdrop-blur-md border border-gray-700 hover:scale-105 hover:shadow-2xl break-words w-full flex flex-col items-center min-w-50"
                 >
                   <span>
-                    {qp.Title || qp.Subject}
+                    {qp.Date}
                   </span>
                   <span className="block text-xs sm:text-sm text-gray-400 mt-1 break-words w-full">
-                    {qp.Date}
                   </span>
                 </Link>
               ))

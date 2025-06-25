@@ -257,7 +257,7 @@ export default function Main() {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 w-full max-w-xs sm:max-w-md lg:max-w-2xl mb-4 sm:mb-4">
           <button
-            onClick={() => dept ? router.push(`/question-paper/${dept.toLowerCase()}`) : setErrorMsg("Please select a department first.")}
+            onClick={() => dept ? router.push(`/${dept.toLowerCase()}/pyq`) : setErrorMsg("Please select a department first.")}
             className={`bg-black/30 hover:bg-black/50 transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full text-center hover:scale-105 ${!dept ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
             disabled={!dept}
           >
@@ -270,7 +270,7 @@ export default function Main() {
             Notes
           </Link>
           <Link
-            href={dept ? `/syllabus/${dept.toLowerCase()}` : "/"}
+            href={dept ? `/${dept.toLowerCase()}/syllabus` : "/"}
             className="bg-black/30 hover:bg-black/60 cursor-pointer transition text-white text-sm sm:text-base lg:text-lg font-semibold px-4 sm:px-6 py-3 rounded-xl backdrop-blur-md shadow-md w-full flex items-center justify-center text-center hover:scale-105"
           >
             Syllabus

@@ -123,7 +123,7 @@ export default function Page({
               </li>
               <li>
                 <Link
-                  href={`/${deptLower}`}
+                  href={`/${deptLower}/pyq`}
                   className="hover:underline text-gray-300"
                 >
                   {deptLower.toUpperCase()}
@@ -144,7 +144,7 @@ export default function Page({
         {subjects.map((sub, index) => (
           <Link
             key={index}
-            href={`/question-paper/${deptLower}/${semNumber}/${sub.Subject.trim().toLowerCase().replace(/[\s,]+/g, "-")}`}
+            href={`/${deptLower}/pyq/${semNumber}/${sub.Subject.trim().toLowerCase().replace(/[\s,]+/g, "-")}`}
             className="group relative flex flex-col items-center justify-center bg-black/60 border border-white/20 rounded-xl shadow-md px-4 py-3 sm:px-6 sm:py-4 transition-all duration-300 backdrop-blur-md cursor-pointer hover:scale-105 hover:shadow-2xl overflow-hidden h-full min-h-[72px]"
             style={{ minWidth: "290px", maxWidth: "290px", margin: "0 auto" }}
           >

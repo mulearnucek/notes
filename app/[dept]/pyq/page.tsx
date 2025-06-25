@@ -53,7 +53,7 @@ export default async function Dept({
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 w-full">
           {semesters.map((sem) => (
-            <Link href={`/question-paper/${title.toLowerCase()}/${sem}`} key={sem} className="group">
+            <Link href={`/${title.toLowerCase()}/pyq/${sem}`} key={sem} className="group">
               <div className="relative bg-black/50 border border-white/20 rounded-2xl backdrop-blur-md shadow-xl flex flex-col items-center justify-center aspect-square h-24 sm:h-32 w-full cursor-pointer overflow-hidden
                 transition-all duration-300
                 group-hover:scale-105 group-hover:shadow-2xl
