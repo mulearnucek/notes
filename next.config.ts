@@ -15,6 +15,18 @@ const nextConfig: NextConfig = {
         hostname: "random-image-pepebigotes.vercel.app",
         port: "",
         pathname: "/api/random-image",
+      },
+      {
+        protocol: "https",
+        hostname: "img.youtube.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        port: "",
+        pathname: "/**",
       }
     ]
   }
