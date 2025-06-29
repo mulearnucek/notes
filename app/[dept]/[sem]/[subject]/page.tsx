@@ -145,7 +145,7 @@ export default function Page({
             <div className="text-md font-medium" >
               Scheme:{" "}
               <span className="font-bold">
-                {(modules[0] && modules[0].Scheme) || "N/A"}
+                {(modules[0] && modules[0].Scheme) || (pyqs![0] && pyqs![0].Scheme) || "N/A"}
               </span>
             </div>
           </div>
