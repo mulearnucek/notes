@@ -5,6 +5,9 @@ import { useDataContext } from "@/lib/DataContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Footer from "@/components/footer";
+import _ from "lodash";
+import { useRouter } from "next/navigation";
+import { MdUpcoming } from "react-icons/md";
 
 export default function Page({
   params,
@@ -16,7 +19,8 @@ export default function Page({
     sem: string;
     dept: string;
   } | null>(null);
-  const { db } = useDataContext();
+  const { db, vldb } = useDataContext();
+  const router = useRouter();
 
   useEffect(() => {
     const resolveParams = async () => {
@@ -31,15 +35,23 @@ export default function Page({
 
     const fetchSubjects = async () => {
       try {
-        setSubjects(
-          db?.query({
+        const subs1 = db?.query({
             where: {
               Department: resolvedParams.dept.toUpperCase(),
               Semester: resolvedParams.sem,
             },
             distinct: "Subject",
-          }) || []
-        );
+          }) || [];
+
+        const subs2 = vldb?.query({
+          where: {
+            Department: resolvedParams.dept.toUpperCase(),
+            Semester: resolvedParams.sem,
+          },
+          distinct: "Subject",
+        }) || [];
+
+        setSubjects(_.uniq([...subs1, ...subs2]));
       } catch (error) {
         console.error("Error fetching subjects:", error);
       }
@@ -77,11 +89,17 @@ export default function Page({
     );
   }
   if (subjects.length === 0) {
-    return (
-      <div className="text-center mt-10 text-white">
-        No subjects found for semester {semNumber} in department {deptLower}
+    return (<>
+      <div className="text-center text-white items-center flex flex-col md:flex-row col-span-full bg-black/60 rounded-xl backdrop-blur p-5 shadow-md border-gray-700 border mt-8 sm:mt-0">
+         <MdUpcoming className="text-6xl mb-2 md:smr-3" />
+          Notes for this semester are not available yet. <br/>
+          We are working on adding it. Please check back later.
       </div>
-    );
+      <Link href={"#"} onClick={router.back} className="mt-4 bg-black/60 text-white px-4 py-2 rounded-lg hover:bg-black scale-100 hover:scale-105 transition-all shadow duration-300">
+        Go Back
+      </Link>
+      <Footer />
+    </>);
   }
 
   return (
