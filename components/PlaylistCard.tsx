@@ -4,10 +4,11 @@ import { FaYoutube, FaPlay } from 'react-icons/fa';
 import Link from 'next/link';
 import { generateThumbnailUrl } from '@/lib/utils';
 import { PlaylistItem } from '@/lib/data';
+import Image from 'next/image';
 
 
 export const PlaylistCard: React.FC<{ playlist: PlaylistItem }> = ({ playlist }) => {
-    const thumbnail = generateThumbnailUrl(playlist.Link, 'maxresdefault');
+    const thumbnail = generateThumbnailUrl(playlist.Link, 'mqdefault');
     
     return (
       <Link
@@ -23,7 +24,7 @@ export const PlaylistCard: React.FC<{ playlist: PlaylistItem }> = ({ playlist })
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-red-500"></div>
               </div>
             ) : (
-              <img
+              <Image
                 src={thumbnail}
                 alt={playlist.Title}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"

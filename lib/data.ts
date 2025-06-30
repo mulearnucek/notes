@@ -25,6 +25,16 @@ export interface PlaylistItem {
   VideosCount: number;
 }
 
+export interface PYQ {
+  Timestamp: string;
+  Scheme: string;
+  Department: string;
+  Semester: string;
+  Subject: string;
+  Date: string;
+  File: string;
+}
+
 export function getData(url: string): Promise<string[][]> {
   return new Promise((resolve, reject) => {
     Papa.parse<string[]>(url, {

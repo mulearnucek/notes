@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
