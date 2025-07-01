@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "../components/header";
 import { DataProvider } from "@/lib/DataContext";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import Footer from "@/components/footer";
 
 // Replace this with your actual image URL (1200x630 recommended)
 const ogImageUrl = "https://notes.uck.ac.in/og-image.jpg";
@@ -67,6 +68,7 @@ export default function RootLayout({
             </div>
             {children}
           </div>
+          <Footer />
         </DataProvider>
         <GoogleAnalytics gaId="G-4VMW6ZQRS1" />
       </body>
