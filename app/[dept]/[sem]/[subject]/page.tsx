@@ -40,16 +40,22 @@ export default function Page({
 
     const fetchModules = async () => {
       try {
-        setModules(
-          db?.query({
-            where: {
-              Department: dept.toUpperCase(),
-              Semester: paramsData.sem,
-              Subject: subject.toUpperCase(),
-            },
-            orderBy: "Module",
-          }) || []
-        );
+        const response = db?.query({
+          where: {
+            Department: dept.toUpperCase(),
+            Semester: paramsData.sem,
+            Subject: subject.toUpperCase(),
+          },
+        }) || [];
+        
+        // Sort modules numerically by Module field
+        const sortedModules = response.sort((a, b) => {
+          const moduleA = parseInt(a.Module) || 0;
+          const moduleB = parseInt(b.Module) || 0;
+          return moduleA - moduleB;
+        });
+        
+        setModules(sortedModules);
       } catch (error) {
         console.error("Error fetching modules:", error);
       }
